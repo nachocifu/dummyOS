@@ -1,6 +1,7 @@
 /* sampleCodeModule.c */
 
 int two();
+void interumpitest();
 
 
 char * v = (char*)0xB8000;
@@ -17,6 +18,7 @@ int main() {
 
 	v[2] = 'a' + two();
 
+	interumpitest();
 
 
 

@@ -162,7 +162,10 @@ void irqDispatcher(int irq) {
 }
 void sysCallDispacher(int primer, int segundo, int tercero, int cuarto){
 
-	video[j++] = j;
+	video[0] = '0' + primer;
+	video[2] = '0' + segundo;
+	video[4] = '0' + tercero;
+	video[6] = '0' + cuarto;
 }
 
 int main()
