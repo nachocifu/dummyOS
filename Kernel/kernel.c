@@ -146,9 +146,11 @@ void keyboardHandler() {
 }
 
 
+
 void sti();
 void irq0Handler();
 void irq1Handler();
+void sysCallHandler();
 void setPicMaster(uint16_t);
 
 typedef void (*handler_t)(void);
@@ -158,6 +160,10 @@ handler_t handlers[] = {tickHandler, keyboardHandler};
 void irqDispatcher(int irq) {
 	handlers[irq]();
 }
+void sysCallDispacher(int primer, int segundo, int tercero, int cuarto){
+
+	video[j++] = j;
+}
 
 int main()
 {	
@@ -166,6 +172,7 @@ int main()
 
 	iSetHandler(0x20, (uint64_t) irq0Handler); 
 	iSetHandler(0x21, (uint64_t) irq1Handler); //Keyboard...
+	iSetHandler(0x80, (uint64_t) sysCallHandler); //Keyboard...
 	//todas las interrupciones se guardan en la IDT. Es una tabla. 
 	//Aca le estamos diciendo que en la posicion 20 guarde la llamada a nuestro metodo a ejecutar al interrupir
 	
@@ -173,13 +180,5 @@ int main()
 	
 	sti();
 
-	while(1){
-		k++;
-		
-		if (k > 10000000)
-		{
-			ncPrintHex(0xFF);
-			k = 0;
-		}
-	}
+	((EntryPoint)sampleCodeModuleAddress)();
 }

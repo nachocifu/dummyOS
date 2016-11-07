@@ -3,10 +3,12 @@ GLOBAL sti
 GLOBAL setPicMaster
 GLOBAL irq0Handler
 GLOBAL irq1Handler
+GLOBAL sysCallHandler
 GLOBAL in_b
 GLOBAL out_b
 
 EXTERN irqDispatcher
+EXTERN sysCallDispacher
 
 %include "./asm/macros.m"
 
@@ -17,6 +19,25 @@ irq0Handler:
 	
 irq1Handler:
 	irqHandler 1
+
+sysCallHandler:
+
+	pushaq
+
+	mov rdi, rdx
+
+	mov rdx, rcx
+	mov rcx, rdi
+
+	mov rdi, rax
+	mov rsi, rbx
+
+	call sysCallDispacher
+	
+	
+	popaq
+
+	iretq
 	
 
 ; parametros 1ro registro
