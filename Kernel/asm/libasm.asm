@@ -3,6 +3,8 @@ GLOBAL sti
 GLOBAL setPicMaster
 GLOBAL irq0Handler
 GLOBAL irq1Handler
+GLOBAL in_b
+GLOBAL out_b
 
 EXTERN irqDispatcher
 
@@ -16,6 +18,41 @@ irq0Handler:
 irq1Handler:
 	irqHandler 1
 	
+
+; parametros 1ro registro
+; retorna en al
+
+in_b:
+	push rbp
+	mov rbp, rsp
+
+	xor rax, rax
+
+	mov rdx, rdi
+
+	in al, dx
+
+	mov rsp, rbp
+	pop rbp
+	ret
+
+; parametros 1ro registro, 2do el valor
+; retorna nada
+
+out_b:
+	push rbp
+	mov rbp, rsp
+
+	xor rax, rax
+
+	mov rdx, rdi
+	mov rax, rsi
+
+	out dx, al
+
+	mov rsp, rbp
+	pop rbp
+	ret
 
 
 sti:

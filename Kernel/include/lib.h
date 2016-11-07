@@ -8,4 +8,7 @@ void * memcpy(void * destination, const void * source, uint64_t length);
 
 char *cpuVendor(char *result);
 
+uint16_t in_b(uint16_t reg);
+uint16_t out_b(uint16_t reg, uint16_t val);
+
 #endif
