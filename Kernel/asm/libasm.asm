@@ -13,6 +13,10 @@ section .text
 irq0Handler:
 	irqHandler 0
 	
+irq1Handler:
+	irqHandler 1
+	
+
 
 sti:
 	sti

@@ -82,39 +82,59 @@ void * initializeKernelBinary()
 }
 
 static int i = 0;
+static int j = 0;
+static int k = 0;
+
+static int l = 0;
+
 char *video = (char *) 0xB8000;
 
 void tickHandler() {
 	video[i++] = i;	
 }
 
+
+void keyboardHandler() {
+	video[j++] = j;
+}
+
+
 void sti();
 void irq0Handler();
+void irq1Handler();
 void setPicMaster(uint16_t);
 
 typedef void (*handler_t)(void);
 
-handler_t handlers[] = {tickHandler};
+handler_t handlers[] = {tickHandler, keyboardHandler};
 
 void irqDispatcher(int irq) {
 	handlers[irq]();
+	l = l + irq;
+	video[0] = '0' + l;
 }
 
 int main()
 {	
+
+	//TODO: 0x21 es teclado, 0x80 syscall, 0x2C es mouse
+
 	iSetHandler(0x20, (uint64_t) irq0Handler); 
+	iSetHandler(0x21, (uint64_t) irq1Handler); //Keyboard...
 	//todas las interrupciones se guardan en la IDT. Es una tabla. 
 	//Aca le estamos diciendo que en la posicion 20 guarde la llamada a nuestro metodo a ejecutar al interrupir
 	
-	setPicMaster(0xFE); //esto le dice al PIC que solo escuche interrupciones de PIT (clock) no de teclado ni nadie mas
+	setPicMaster(0xFC); //esto le dice al PIC que solo escuche interrupciones de PIT (clock) no de teclado ni nadie mas
 	
 	sti();
 
-	while (1) {
-		int k = 0;
-		while(k < 1000*1000*20) {
-			k++;
+	while(1){
+		k++;
+		
+		if (k > 10000000)
+		{
+			ncPrintHex(0xFF);
+			k = 0;
 		}
-		ncPrintHex(i);
 	}
 }
