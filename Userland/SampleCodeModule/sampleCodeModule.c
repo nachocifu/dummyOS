@@ -1,5 +1,8 @@
 /* sampleCodeModule.c */
 
+int two();
+
+
 char * v = (char*)0xB8000;
 
 static int var1 = 0;
@@ -12,7 +15,7 @@ int main() {
 
 
 
-	v[2] = 'a';
+	v[2] = 'a' + two();
 
 
 
