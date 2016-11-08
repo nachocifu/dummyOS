@@ -2,6 +2,7 @@
 
 int two();
 void interumpitest();
+void syscall(int a, int b, int c, int d);
 
 
 char * v = (char*)0xB8000;
@@ -16,9 +17,9 @@ int main() {
 
 
 
-	v[2] = 'a' + two();
+	syscall(0, "Hola que tal?", 0, 0);
 
-	interumpitest();
+
 
 
 

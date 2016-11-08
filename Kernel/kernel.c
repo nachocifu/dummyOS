@@ -160,12 +160,21 @@ handler_t handlers[] = {tickHandler, keyboardHandler};
 void irqDispatcher(int irq) {
 	handlers[irq]();
 }
-void sysCallDispacher(int primer, int segundo, int tercero, int cuarto){
+void sysCallDispacher(int function, char* segundo, int tercero, int cuarto){
 
-	video[0] = '0' + primer;
-	video[2] = '0' + segundo;
-	video[4] = '0' + tercero;
-	video[6] = '0' + cuarto;
+
+	switch(function){
+		case 0:{
+			ncPrint(segundo);
+			ncNewline();
+			break;
+		}
+		default:{
+			ncPrint("SysCall not found.");
+			break;
+		}
+	}
+	
 }
 
 int main()
