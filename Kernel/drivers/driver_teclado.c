@@ -4,40 +4,6 @@
  * Este driver se dedica a hacer el "handeling" de la interupcion de teclado y decodificar los scanncodes recibidos.
 */
 
-#define TRUE 1
-#define FALSE 0
-
-#define BACKSPACE_DOWN 14
-#define BACKSPACE_UP 142
-#define SHIFT_LEFT_DOWN 42
-#define SHIFT_LEFT_UP 170
-#define SHIFT_RIGHT_DOWN 54
-#define SHIFT_RIGHT_UP 182
-#define CAPSLOCK_DOWN 58
-#define CAPSLOCK_UP 186
-#define SPACEBAR_DOWN 57
-#define SPACEBAR_UP 185
-#define ENTER_DOWN 28
-#define ENTER_UP 156
-#define TAB_DOWN 15
-#define TAB_UP 143
-#define CONTROL_DOWN 29
-#define CONTROL_UP 157
-#define ESC_DOWN 1
-#define ESC_UP 129
-
-#define ARRAW_KEY 224
-
-#define ARROW_UP_DOWN 72
-#define ARROW_UP_UP 200
-#define ARROW_DOWN_DOWN 80
-#define ARROW_DOWN_UP 208
-#define ARROW_LEFT_DOWN 77
-#define ARROW_LEFT_UP 205
-#define ARROW_RIGHT_DOWN 75
-#define ARROW_RIGHT_UP 203
-
-
 void (*myCallback)(uint8_t, int);
 
 
@@ -125,7 +91,7 @@ int isPrintable(int digit){
 	return digit <= 162 && digit >= 33;
 }
 
-void setKeyboardCallback(void (*f)(uint8_t, int)){
+void setKeyboardCallback(void (*f)(uint8_t, int)){ //Esta funcion la usamos para poder devolver los eventos de teclado a quien sea que se registre aca.
 	myCallback = f;
 }
 
@@ -133,47 +99,45 @@ void keyboardHandler() {
 	uint16_t scancode = in_b(0x60);
 
 
-	if (isArrow){
+	if (isArrow){ //Si anteriormente se recibio un codigo de flecha, (ya que las flechas mandan 2 codigos, uno de flecha y el otro cual espesificamente) entonces entro directamente al switch de ARROWS.
 		switch(scancode){
 			isArrow = FALSE;
 			case ARROW_UP_DOWN:{
-				myCallback(1, 3);
+				myCallback(1, RESPONSE_ARROWS);
 				break;
 			}
 			case ARROW_UP_UP:{
-				myCallback(1, 3);
+				myCallback(1, RESPONSE_ARROWS);
 				break;
 			}
 			case ARROW_DOWN_DOWN:{
-				myCallback(2, 3);
+				myCallback(2, RESPONSE_ARROWS);
 				break;
 			}
 			case ARROW_DOWN_UP:{
-				myCallback(2, 3);
+				myCallback(2, RESPONSE_ARROWS);
 				break;
 			}
 			case ARROW_RIGHT_DOWN:{
-				myCallback(3, 3);
+				myCallback(3, RESPONSE_ARROWS);
 				break;
 			}
 			case ARROW_RIGHT_UP:{
-				myCallback(3, 3);
+				myCallback(3, RESPONSE_ARROWS);
 				break;
 			}
 			case ARROW_LEFT_DOWN:{
-				myCallback(4, 3);
+				myCallback(4, RESPONSE_ARROWS);
 				break;
 			}
 			case ARROW_LEFT_UP:{
-				myCallback(4, 3);
+				myCallback(4, RESPONSE_ARROWS);
 				break;
 			}
 		}
 	}
-	if (ARRAW_KEY){
-		isArrow = TRUE;
-	}
-	switch(scancode){
+	
+	switch(scancode){ //Este es el scancode de las teclas especiales.
 		case BACKSPACE_UP:{
 			break;
 		}
@@ -196,20 +160,25 @@ void keyboardHandler() {
 			break;
 		}
 		case BACKSPACE_DOWN:{
-			myCallback(0, 1);
+			myCallback(0, RESPONSE_BACKSPACE);
 			return;
 		}
 		case ENTER_DOWN:{
-			myCallback(0, 2);
+			myCallback(0, RESPONSE_ENTER);
 			return;
+		}
+		case ARROW_KEY:{
+			isArrow = TRUE;
+			break;
 		}
 
 	}
-	if (isPrintable(kbdus[scancode]) && scancode < 126){
+
+	if (isPrintable(kbdus[scancode]) && scancode < 126){ //Esto imprime devuelve la tecla character.
 		if (shifted || capslocked){
-			myCallback(kbdusShifted[scancode], 0);
+			myCallback(kbdusShifted[scancode], RESPONSE_CHARACTER);
 		}else{
-			myCallback(kbdus[scancode], 0);
+			myCallback(kbdus[scancode], RESPONSE_CHARACTER);
 		}
 	}
 }
