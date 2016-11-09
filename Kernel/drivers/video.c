@@ -34,74 +34,17 @@ void backspace(){
 void newLine(){
 
 }
+void read(){
+
+}
+void write(){
+	
+}
+
+
 void scanf(){
 
 }
 
-void printf(char *format, ...){
-	
-	//Revisar que el string es correcto.
 
-
-
-	char output[200];
-
-	int index = 0;
-	int num_args = 0;
-	while(format[index] != 0){
-		if (format[index] == '%'){
-			num_args++;
-		}
-		index++;
-	}
-	index = 0;
-	int indexOutput = 0;
-	va_list ap;
-	va_start(ap, num_args);
-	while(format[index] != 0){
-		if (format[index] == '%'){
-			switch(format[++index]){
-				case 'c':{
-					char value = (char)va_arg(ap, int);
-					output[indexOutput++] = value;
-					break;
-				}
-				case 'd':{
-					//TODO
-					char number[20];
-					int characters = uintToBase(va_arg(ap, int), number, 10);
-					for (int j = 0; j < characters; j++){
-						output[indexOutput++] = number[j];
-					}
-					break;
-				}
-				case 's':{
-					char *string = va_arg(ap, char*);
-					int indexAux = 0;
-					while (string[indexAux] != 0){
-						output[indexOutput++] = string[indexAux++];
-					}
-					break;
-				}
-				case 'f':{
-					break;
-				}
-				case 'u':{
-					break;
-				}
-			}
-			
-		}else{
-			output[indexOutput++] = format[index];
-		}
-		index++;
-	}
-	output[indexOutput] = 0;
-	va_end(ap);
-	
-	ncPrint(output);
-	
-	//return output;
-
-}
 

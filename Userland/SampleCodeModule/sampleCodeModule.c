@@ -1,9 +1,5 @@
 /* sampleCodeModule.c */
-
-int two();
-void interumpitest();
-void syscall(int a, int b, int c, int d);
-
+#include <libc.h>
 
 char * v = (char*)0xB8000;
 
@@ -17,7 +13,7 @@ int main() {
 
 
 
-	//syscall(0, "Hola que tal?", 0, 0);
+	printf("Hola %s", "ioni");
 
 
 	while(1){

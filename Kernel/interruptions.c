@@ -26,11 +26,13 @@ handler_t handlers[] = {tickHandler, keyboardHandler};
 
 
 void init_interruptions() {
+
+	setPicMaster(0xFD); //esto le dice al PIC que solo escuche interrupciones de PIT (clock) no de teclado ni nadie mas
+
 	iSetHandler(0x20, (uint64_t) irq0Handler); //TIC
 	iSetHandler(0x21, (uint64_t) irq1Handler); //Keyboard...
 	iSetHandler(0x80, (uint64_t) sysCallHandler); //Syscalls...
 
-	setPicMaster(0xFD); //esto le dice al PIC que solo escuche interrupciones de PIT (clock) no de teclado ni nadie mas
 	sti();
 }
 
