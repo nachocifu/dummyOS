@@ -17,7 +17,7 @@ int main() {
 
 
 
-	syscall(0, "Hola que tal?", 0, 0);
+	//syscall(0, "Hola que tal?", 0, 0);
 
 
 	while(1){

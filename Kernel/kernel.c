@@ -118,14 +118,18 @@ void miCallbacldeTeclado(uint8_t c, int function){
 			ncPrintDec(c);
 			break;
 		}
+		case RESPONSE_TAB:{
+			ncPrint("    ");
+			break;
+		}
 	}
 }
 
 int main(){
 
 	// TESTING
-	char *s = printf("test test %c test %s", 'c', "hola que tal");
-	ncPrint(s);
+	printf("test te%sst %c te%dst %s", "EEEeeeEEee",'c', 1234567890, "hola que tal");
+
 
 	// Kernel INIT
 	init_interruptions();

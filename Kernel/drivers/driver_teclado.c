@@ -88,7 +88,7 @@ static uint8_t kbdusShifted[128] = {
 };
 
 int isPrintable(int digit){
-	return digit <= 162 && digit >= 33;
+	return digit <= 162 && digit >= 32;
 }
 
 void setKeyboardCallback(void (*f)(uint8_t, int)){ //Esta funcion la usamos para poder devolver los eventos de teclado a quien sea que se registre aca.
@@ -171,7 +171,10 @@ void keyboardHandler() {
 			isArrow = TRUE;
 			break;
 		}
-
+		case TAB_DOWN:{
+			myCallback(0, RESPONSE_TAB);
+			return;
+		}
 	}
 
 	if (isPrintable(kbdus[scancode]) && scancode < 126){ //Esto imprime devuelve la tecla character.
