@@ -42,12 +42,13 @@
 #define RESPONSE_BACKSPACE 1
 #define RESPONSE_ENTER 2
 #define RESPONSE_ARROWS 3
+#define RESPONSE_TAB 4
 
 // Divers Keyboard
 void setKeyboardCallback(void (*f)(uint8_t, int));
 void keyboardHandler();
 
 // Divers Video
-char* printf(char *format, ...);
+void printf(char *format, ...);
 
 // Divers Network

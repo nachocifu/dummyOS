@@ -1,5 +1,6 @@
 #include <stdarg.h>
 #include <drivers.h>
+#include <naiveConsole.h>
 /**
  * Esta driver es el que se ocupa de manejo de input y output de la pantalla.
  * Tecnico: Este driver te da la linea de edicion (ultima) y si hay un scanf (por ejempo) devuelver el valor, etc, etc.
@@ -36,7 +37,8 @@ void newLine(){
 void scanf(){
 
 }
-char* printf(char *format, ...){
+
+void printf(char *format, ...){
 	
 	//Revisar que el string es correcto.
 
@@ -66,6 +68,11 @@ char* printf(char *format, ...){
 				}
 				case 'd':{
 					//TODO
+					char number[20];
+					int characters = uintToBase(va_arg(ap, int), number, 10);
+					for (int j = 0; j < characters; j++){
+						output[indexOutput++] = number[j];
+					}
 					break;
 				}
 				case 's':{
@@ -92,7 +99,9 @@ char* printf(char *format, ...){
 	output[indexOutput] = 0;
 	va_end(ap);
 	
+	ncPrint(output);
 	
-	return output;
+	//return output;
 
 }
+
