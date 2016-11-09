@@ -20,17 +20,9 @@ int main() {
 	syscall(0, "Hola que tal?", 0, 0);
 
 
-
-
-
-
-
 	while(1){
 		k++;
-		
-		if (k > 10000000)
-		{
-
+		if (k > 10000000){
 			k = 0;
 		}
 	}

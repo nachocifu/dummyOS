@@ -4,6 +4,7 @@
 #include <moduleLoader.h>
 #include <naiveConsole.h>
 #include <interruptions.h>
+#include <drivers.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -87,45 +88,7 @@ static int k = 0;
 
 static int l = 0;
 
-unsigned char kbdus[128] =
-{
-    0,  27, '1', '2', '3', '4', '5', '6', '7', '8',	/* 9 */
-  '9', '0', '-', '=', '\b',	/* Backspace */
-  '\t',			/* Tab */
-  'q', 'w', 'e', 'r',	/* 19 */
-  't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\n',	/* Enter key */
-    0,			/* 29   - Control */
-  'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';',	/* 39 */
- '\'', '`',   0,		/* Left shift */
- '\\', 'z', 'x', 'c', 'v', 'b', 'n',			/* 49 */
-  'm', ',', '.', '/',   0,				/* Right shift */
-  '*',
-    0,	/* Alt */
-  ' ',	/* Space bar */
-    0,	/* Caps lock */
-    0,	/* 59 - F1 key ... > */
-    0,   0,   0,   0,   0,   0,   0,   0,
-    0,	/* < ... F10 */
-    0,	/* 69 - Num lock*/
-    0,	/* Scroll Lock */
-    0,	/* Home key */
-    0,	/* Up Arrow */
-    0,	/* Page Up */
-  '-',
-    0,	/* Left Arrow */
-    0,
-    0,	/* Right Arrow */
-  '+',
-    0,	/* 79 - End key*/
-    0,	/* Down Arrow */
-    0,	/* Page Down */
-    0,	/* Insert Key */
-    0,	/* Delete Key */
-    0,   0,   0,
-    0,	/* F11 Key */
-    0,	/* F12 Key */
-    0,	/* All other keys are undefined */
-};
+
 
 char *video = (char *) 0xB8000;
 
@@ -133,17 +96,8 @@ void tickHandler() {
 	video[i++] = i;	
 }
 
-int isPrintable(int digit){
-	return digit <= 162 && digit >= 33;
-}
 
-void keyboardHandler() {
 
-	uint16_t scancode = in_b(0x60);
-	if (isPrintable(kbdus[scancode]) && scancode < 126)
-		video[0] = kbdus[scancode];
-
-}
 
 
 
@@ -177,14 +131,29 @@ void sysCallDispacher(int function, char* segundo, int tercero, int cuarto){
 	
 }
 
+void miCallbacldeTeclado(uint8_t c, int function){
+	switch(function){
+		case 0:{
+			ncPrintChar((char)c);
+			break;
+		}
+		case 1:{
+			ncPrintChar((char)'.');
+			break;
+		}
+	}
+	
+}
+
 int main()
 {	
 
+	setKeyboardCallback(miCallbacldeTeclado);
 	//TODO: 0x21 es teclado, 0x80 syscall, 0x2C es mouse
 
 	iSetHandler(0x20, (uint64_t) irq0Handler); 
 	iSetHandler(0x21, (uint64_t) irq1Handler); //Keyboard...
-	iSetHandler(0x80, (uint64_t) sysCallHandler); //Keyboard...
+	iSetHandler(0x80, (uint64_t) sysCallHandler); //Syscalls...
 	//todas las interrupciones se guardan en la IDT. Es una tabla. 
 	//Aca le estamos diciendo que en la posicion 20 guarde la llamada a nuestro metodo a ejecutar al interrupir
 	
