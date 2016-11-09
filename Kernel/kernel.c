@@ -134,11 +134,19 @@ void sysCallDispacher(int function, char* segundo, int tercero, int cuarto){
 void miCallbacldeTeclado(uint8_t c, int function){
 	switch(function){
 		case 0:{
-			ncPrintChar((char)c);
+			ncPrintChar((unsigned char)c);
 			break;
 		}
 		case 1:{
 			ncPrintChar((char)'.');
+			break;
+		}
+		case 2:{
+			ncNewline();
+			break;
+		}
+		case 3:{
+			ncPrintDec(c);
 			break;
 		}
 	}
