@@ -150,11 +150,12 @@ void miCallbacldeTeclado(uint8_t c, int function){
 			break;
 		}
 	}
-	
 }
 
-int main()
-{	
+int main(){
+
+	char *s = printf("test test %c test %s", 'c', "hola que tal");
+	ncPrint(s);
 
 	setKeyboardCallback(miCallbacldeTeclado);
 	//TODO: 0x21 es teclado, 0x80 syscall, 0x2C es mouse
