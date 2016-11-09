@@ -24,6 +24,18 @@ typedef void (*handler_t)(void);
 handler_t handlers[] = {tickHandler, keyboardHandler};
 
 
+
+void init_interruptions() {
+	iSetHandler(0x20, (uint64_t) irq0Handler); //TIC
+	iSetHandler(0x21, (uint64_t) irq1Handler); //Keyboard...
+	iSetHandler(0x80, (uint64_t) sysCallHandler); //Syscalls...
+
+	setPicMaster(0xFD); //esto le dice al PIC que solo escuche interrupciones de PIT (clock) no de teclado ni nadie mas
+	sti();
+}
+
+
+
 void iSetHandler(int index, uint64_t handler) {
 	IDT[index].offset_l = (uint16_t) handler & 0xFFFF;
 	IDT[index].offset_m = (uint16_t) (handler >> 16) & 0xFFFF;

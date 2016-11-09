@@ -5,6 +5,13 @@
 
 void iSetHandler(int index, uint64_t handler);
 void irqDispatcher(int irq);
+
+void sti();
+void setPicMaster(uint16_t);
+
 void tickHandler();
+void irq0Handler();
+void irq1Handler();
+void sysCallHandler();
 
 #endif

@@ -83,13 +83,6 @@ void * initializeKernelBinary()
 }
 
 
-void sti();
-void irq0Handler();
-void irq1Handler();
-void sysCallHandler();
-void setPicMaster(uint16_t);
-
-
 void sysCallDispacher(int function, char* segundo, int tercero, int cuarto){
 
 
@@ -130,21 +123,16 @@ void miCallbacldeTeclado(uint8_t c, int function){
 
 int main(){
 
+	// TESTING
 	char *s = printf("test test %c test %s", 'c', "hola que tal");
 	ncPrint(s);
 
-	setKeyboardCallback(miCallbacldeTeclado);
-	//TODO: 0x21 es teclado, 0x80 syscall, 0x2C es mouse
+	// Kernel INIT
+	init_interruptions();
 
-	iSetHandler(0x20, (uint64_t) irq0Handler); 
-	iSetHandler(0x21, (uint64_t) irq1Handler); //Keyboard...
-	iSetHandler(0x80, (uint64_t) sysCallHandler); //Syscalls...
-	//todas las interrupciones se guardan en la IDT. Es una tabla. 
-	//Aca le estamos diciendo que en la posicion 20 guarde la llamada a nuestro metodo a ejecutar al interrupir
-	
-	setPicMaster(0xFD); //esto le dice al PIC que solo escuche interrupciones de PIT (clock) no de teclado ni nadie mas
-	
-	sti();
+	// Kernel Operations
+	setKeyboardCallback(miCallbacldeTeclado);	
 
+	// UserLand Init
 	((EntryPoint)sampleCodeModuleAddress)();
 }
