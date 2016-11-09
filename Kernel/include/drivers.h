@@ -8,6 +8,8 @@ void setKeyboardCallback(void (*f)(uint8_t, int));
 void keyboardHandler();
 
 // Divers Video
-//void printf(char *format, ...);
+void write(char *str, int length);
+int read(char* str);
+void newLine();
 
 // Divers Network

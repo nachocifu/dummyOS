@@ -172,7 +172,10 @@ void keyboardHandler() {
 			break;
 		}
 		case TAB_DOWN:{
-			myCallback(0, RESPONSE_TAB);
+			myCallback(' ', RESPONSE_CHARACTER);
+			myCallback(' ', RESPONSE_CHARACTER);
+			myCallback(' ', RESPONSE_CHARACTER);
+			myCallback(' ', RESPONSE_CHARACTER);
 			return;
 		}
 	}

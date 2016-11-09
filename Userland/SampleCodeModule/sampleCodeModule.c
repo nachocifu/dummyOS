@@ -11,11 +11,19 @@ static int k = 0;
 int main() {
 	//All the following code may be removed 
 
+	printf("Empezo userland");
+
+	char f[10];
 
 
-	printf("Hola %s", "ioni");
-
-
+	
+	
+	while(1){
+		scanf(f);
+		printf("Valor: %s", f);
+	
+	}
+	
 	while(1){
 		k++;
 		if (k > 10000000){

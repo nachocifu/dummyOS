@@ -1,6 +1,6 @@
 #include <libc.h>
 
-void syscall(int a, int b, int c, int d);
+int syscall(int a, int b, int c, int d);
 
 uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 {
@@ -95,12 +95,30 @@ void printf(char *format, ...){
 	output[indexOutput] = 0;
 	va_end(ap);
 	
-	syscall(0, output, 0, 0);
+	syscall(0, output, indexOutput, 0);
 	
 	//return output;
 
 }
 
+void scanf(char *str){
+
+	char end = 0;
+	char buffer[10];
+
+	int indexStr = 0;
+
+	while(!end){
+		int lon = syscall(1, buffer, 0, 0);
+		for (int i = 0; i < lon; i++){
+			str[indexStr++] = buffer[i];
+			if (buffer[i] == '\n'){
+				end = 1;
+			}
+		}
+	}
+	str[indexStr] = 0;
+}
 
 // static void *ptr = NULL;
 

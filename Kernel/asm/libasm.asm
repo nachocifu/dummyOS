@@ -22,20 +22,25 @@ irq1Handler:
 
 sysCallHandler:
 
+	; El orden de las syscalls es rax, rbx, rcx y rdx.
+	; El orden de las funciones en C son rdi, rsi, rdx, rcx, r8 y r9.
+	; Aca solamente tengo que redistribuir los registros.
+
 	pushaq
-
-	mov rdi, rdx
-
-	mov rdx, rcx
-	mov rcx, rdi
+	mov r8, rdx
 
 	mov rdi, rax
 	mov rsi, rbx
-
+	mov rdx, rcx
+	mov rcx, r8
+	
 	call sysCallDispacher
 	
-	
+	mov [result], rax
+
 	popaq
+
+	mov rax, [result]
 
 	iretq
 	
@@ -113,3 +118,7 @@ cpuVendor:
 	mov rsp, rbp
 	pop rbp
 	ret
+
+section .data
+	result dd 0
+

@@ -83,45 +83,48 @@ void * initializeKernelBinary()
 }
 
 
-void sysCallDispacher(int function, char* segundo, int tercero, int cuarto){
-
+int sysCallDispacher(int function, char* segundo, int tercero, int cuarto){
 
 	switch(function){
 		case 0:{
-			ncPrint(segundo);
-			ncNewline();
+			write(segundo, tercero);
 			break;
+		}
+		case 1:{
+			//ncPrint("SysCall read.");
+			int t = read(segundo);
+			return t;
 		}
 		default:{
 			ncPrint("SysCall not found.");
 			break;
 		}
 	}
+	return 0;
 	
 }
+
+
 
 void miCallbacldeTeclado(uint8_t c, int function){
 	switch(function){
 		case RESPONSE_CHARACTER:{
-			ncPrintChar((unsigned char)c);
+			write(&c, 1);
 			break;
 		}
 		case RESPONSE_BACKSPACE:{
-			ncPrintChar((char)'.');
+			//write((char)'.', 1);
 			break;
 		}
 		case RESPONSE_ENTER:{
-			ncNewline();
+			newLine();
 			break;
 		}
 		case RESPONSE_ARROWS:{
-			ncPrintDec(c);
+			//ncPrintDec(c);
 			break;
 		}
-		case RESPONSE_TAB:{
-			ncPrint("    ");
-			break;
-		}
+		
 	}
 }
 

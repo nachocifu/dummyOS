@@ -6,45 +6,48 @@
  * Tecnico: Este driver te da la linea de edicion (ultima) y si hay un scanf (por ejempo) devuelver el valor, etc, etc.
  */
 
-void keyboardEvent(uint8_t c, int function){
-	switch(function){
-		case RESPONSE_CHARACTER:{
-			ncPrintChar((unsigned char)c);
-			break;
-		}
-		case RESPONSE_BACKSPACE:{
-			ncPrintChar((char)'.');
-			break;
-		}
-		case RESPONSE_ENTER:{
-			ncNewline();
-			break;
-		}
-		case RESPONSE_ARROWS:{
-			ncPrintDec(c);
-			break;
-		}
-	}
-}
+char buffer[500];
+int startBuffering = FALSE;
+int bufferIndex = 0;
 
+
+void clean(){
+
+}
 void backspace(){
 
 }
-
 void newLine(){
-
+	char nl = '\n';
+	write(&nl, 1);
+	ncNewline();
 }
-void read(){
+int read(char *str){
 
+	startBuffering = TRUE;
+
+	int i = 0;
+	for (i = 0; i < bufferIndex; i++){
+		str[i] = buffer[i];
+		if (buffer[i] == '\n'){
+			startBuffering = FALSE;
+		}
+	}
+	str[i] = 0;
+
+	int aux = bufferIndex;
+	bufferIndex = 0;
+	return aux;
 }
-void write(){
+void write(char *str, int length){
+	
+	for (int i = 0; i < length; i++){
+		if (startBuffering){
+			buffer[bufferIndex++] = str[i];
+		}
+		if (str[i] != '\n')
+			ncPrintChar(str[i]);
+	}
+	
 	
 }
-
-
-void scanf(){
-
-}
-
-
-
