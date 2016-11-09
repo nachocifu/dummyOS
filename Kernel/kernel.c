@@ -82,24 +82,6 @@ void * initializeKernelBinary()
 	return getStackBase();
 }
 
-static int i = 0;
-static int j = 0;
-static int k = 0;
-
-static int l = 0;
-
-
-
-char *video = (char *) 0xB8000;
-
-void tickHandler() {
-	video[i++] = i;	
-}
-
-
-
-
-
 
 void sti();
 void irq0Handler();
@@ -107,13 +89,7 @@ void irq1Handler();
 void sysCallHandler();
 void setPicMaster(uint16_t);
 
-typedef void (*handler_t)(void);
 
-handler_t handlers[] = {tickHandler, keyboardHandler};
-
-void irqDispatcher(int irq) {
-	handlers[irq]();
-}
 void sysCallDispacher(int function, char* segundo, int tercero, int cuarto){
 
 

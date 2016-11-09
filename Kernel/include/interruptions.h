@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 void iSetHandler(int index, uint64_t handler);
-
+void irqDispatcher(int irq);
+void tickHandler();
 
 #endif

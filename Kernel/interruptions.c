@@ -1,5 +1,6 @@
 //interruptions.c
 #include <interruptions.h>
+#include <drivers.h>
 
 #pragma pack(push)
 #pragma pack(1)
@@ -18,6 +19,10 @@ typedef struct {
 
 static IDTEntry_t* IDT = (IDTEntry_t*) 0x0;
 
+typedef void (*handler_t)(void);
+
+handler_t handlers[] = {tickHandler, keyboardHandler};
+
 
 void iSetHandler(int index, uint64_t handler) {
 	IDT[index].offset_l = (uint16_t) handler & 0xFFFF;
@@ -30,5 +35,16 @@ void iSetHandler(int index, uint64_t handler) {
 	IDT[index].attrs = 0x8E;
 	IDT[index].zero_h = 0;	
 	
+}
+
+void irqDispatcher(int irq) {
+	handlers[irq]();
+}
+
+
+char *video = (char *) 0xB8000;
+static int videoIndex = 0;
+void tickHandler() {
+	video[videoIndex++] = videoIndex;	
 }
 
