@@ -14,7 +14,7 @@ syscall:
 	; El orden de las funciones en C son rdi, rsi, rdx, rcx, r8 y r9.
 	; Aca solamente tengo que redistribuir los registros.
 
-	mov r8, rdx ; Pongo rdx en rdi para alternarlo con rcx.
+	mov r8, rdx ; Pongo rdx en r8 para alternarlo con rcx.
 
 	mov rdx, rcx 
 	mov rcx, r8

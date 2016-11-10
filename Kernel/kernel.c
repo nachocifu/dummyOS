@@ -108,19 +108,17 @@ int sysCallDispacher(int function, char* segundo, int tercero, int cuarto){
 void miCallbacldeTeclado(uint8_t c, int function){
 	switch(function){
 		case RESPONSE_CHARACTER:{
-			write(&c, 1);
+			write(&c, 1); //RESPONSE_CHARACTER es cuando el usuario presiona una tecla imprimible. Llamo a write del driver de video.
 			break;
 		}
 		case RESPONSE_BACKSPACE:{
-			//write((char)'.', 1);
 			break;
 		}
 		case RESPONSE_ENTER:{
-			newLine();
+			newLine(); //RESPONSE_ENTER es cuando el usuario presiona "return". Llamo a "newLine" del driver de video.
 			break;
 		}
 		case RESPONSE_ARROWS:{
-			//ncPrintDec(c);
 			break;
 		}
 		

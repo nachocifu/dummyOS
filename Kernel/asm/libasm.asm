@@ -36,10 +36,9 @@ sysCallHandler:
 	
 	call sysCallDispacher
 	
-	mov [result], rax
-
+	mov [result], rax ; Como 'popaq' pone todos los registros en su valor original, guardo 'rax' (mi valor de retorno)
+					  ; en una variable en memoria para despues de llamar a 'popaq' volver a asignarlo a 'rax'.
 	popaq
-
 	mov rax, [result]
 
 	iretq
