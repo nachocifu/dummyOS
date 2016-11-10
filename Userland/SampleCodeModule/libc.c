@@ -2,8 +2,7 @@
 
 int syscall(int a, int b, int c, int d);
 
-uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
-{
+uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base){
 	char *p = buffer;
 	char *p1, *p2;
 	uint32_t digits = 0;
@@ -38,7 +37,7 @@ uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base)
 
 void printf(char *format, ...){
 	
-	//Revisar que el string es correcto.
+	//TODO: Revisar que el string es correcto.
 
 	char output[200];
 
@@ -96,28 +95,38 @@ void printf(char *format, ...){
 	va_end(ap);
 	
 	syscall(0, output, indexOutput, 0);
-	
-	//return output;
-
 }
 
+/**
+ *La funcion scanf funciona como la clasica funcion de scanf.
+ *La particularidad de esta en este proyecto es que para recibir el valor de pantalla hace polling.
+ *La funcion le entran los characteres ni bien se ingresan en pantalla pero unicamente los devuelve cuando
+ *el usuario presiono "return" (Esto se ve cuando le llega un character '\n').
+ *En caso que el usuario quiera un "feed" en tiempo real de la pantalla se puede crear otra funcion de tipo scan
+ *que simplemente no espere ningun character especial.
+ */
 void scanf(char *str){
 
+	//TODO: Revisar que el string sea valido y implementar que scan devuelva los valores en los punteros ingresados.
+
 	char end = 0;
-	char buffer[10];
+	char buffer[10]; //Buffer es un pequeño buffer de los valores que devuelve el syscall read, como lo estoy llamando adentro
+					 //de un loop este buffer nunca se va a llenar mucho entonces su tamaño no es importante.
+					 //Para que este buffer se llene el usuario tiene que apretar 10 teclas a mas rapido de lo que el kernel 
+					 //tarde en responder el syscall.
 
 	int indexStr = 0;
 
 	while(!end){
-		int lon = syscall(1, buffer, 0, 0);
+		int lon = syscall(1, buffer, 0, 0); //Llamo a la syscall, me devuelve la longitud de lo devuelto en 'buffer'.
 		for (int i = 0; i < lon; i++){
-			str[indexStr++] = buffer[i];
+			str[indexStr++] = buffer[i]; //Concateno buffer al final de 'str'.
 			if (buffer[i] == '\n'){
-				end = 1;
+				end = 1; //Si encontre un '\n' entonces el usuario apreto "return", puedo terminar.
 			}
 		}
 	}
-	str[indexStr] = 0;
+	str[indexStr] = 0; //Pongo un 0 al final del string del usuario para que funcione bien en C.
 }
 
 // static void *ptr = NULL;
