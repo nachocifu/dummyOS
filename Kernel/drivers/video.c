@@ -1,6 +1,8 @@
 #include <stdarg.h>
 #include <drivers.h>
 #include <naiveConsole.h>
+#include <leeryConsole.h>
+
 /**
  * Esta driver es el que se ocupa de manejo de input y output de la pantalla.
  * Tecnico: Este driver te da la linea de edicion (ultima) y si hay un scanf (por ejempo) devuelver el valor, etc, etc.
@@ -26,7 +28,7 @@ void newLine(){
 	char nl = '\n';
 	write(&nl, 1);
 	
-	ncNewline();
+	lcNewLine();
 }
 
 /**
@@ -61,16 +63,16 @@ int read(char *str){
  *Esta funcion escribe en pantalla el string recibido a la longitud pedida.
  */
 void write(char *str, int length){
-	for (int i = 0; i < length; i++){
-		if (startBuffering){ //Si startBuffering esta en true entonces guardo todo lo impreso.
-			buffer[bufferIndex++] = str[i];
+	
+	if (startBuffering == FALSE){
+		lcPrint(str);
+	}else{
+		for (int i = 0; i < length; i++){
+			if (startBuffering){ //Si startBuffering esta en true entonces guardo todo lo impreso.
+				buffer[bufferIndex++] = str[i];
+			}
 		}
-		if (str[i] != '\n'){ //Si el character es un '\n' no lo imprimo.
-			ncPrintChar(str[i]); //TODO: Si esto es un '\n' imprimo una linea nueva? Es distinto si el user lo envia o si es parte del funcionamiento de read y el buffer.
-		}else{
-			if (startBuffering == FALSE)
-				ncNewline();
-		}
+		lcPrintChar(str[0]); //Si start buffering esta en TRUE entonces los characteres entran por teclado, o sea de a uno.
 	}
 }
 

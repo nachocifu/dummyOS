@@ -151,32 +151,32 @@ void scanf(char *format, ...){
 	va_list ap;
 	va_start(ap, 1);
 
-	int index = 0;
+	int index = 0; //Este es el index del string de formato.
 	while(format[index] != 0){
-		if (format[index] == '%'){
-			char type = format[++index];
+		if (format[index] == '%'){ //Si el character es un '%' entonces el proximo character es el formato.
+			char type = format[++index]; //Aca tomo el proximo.
 			switch(type){
-				case 'c':{
+				case 'c':{ //Tipo char.
 					char *d = va_arg(ap, char*);
 					*d = str[0];
 					break;
 				}
-				case 'd':{
+				case 'd':{ //Tipo integer.
 					int *d = va_arg(ap, int*);
 					int a = stringToInt(str, indexStr-1); //indexStr es mas largo que el valor porque toma en cuenta el 0.
 					*d = a;
 					break;
 				}
-				case 's':{
+				case 's':{ //Tipo String.
 					char *d = va_arg(ap, char*);
 					for (int i = 0; i < indexStr + 1; i++) //El +1 es para que meta el 0 al final.
 						d[i] = str[i];
 					break;
 				}
-				case 'f':{
+				case 'f':{ //Tipo float.
 					break;
 				}
-				case 'u':{
+				case 'u':{ //Tipo unsigned.
 					break;
 				}
 			}
