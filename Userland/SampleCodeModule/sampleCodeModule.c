@@ -39,13 +39,14 @@ int main() {
 	return 0xDEADBEEF;
 }
 
-void parseCommand(char** params) {
+void parseCommand(char (**params)) {
 	printf("Hola Mundo!\n");
-	printf("PARAM = %s\n", &params[0]);
-	printf("PARAM = %s\n", &params[1]);
-	printf("PARAM = %s\n", &params[2]);
-	printf("PARAM = %s\n", &params[3]);
-	printf("PARAM = %s\n", &params[4]);
+	
+	printf("PARAM = %s\n", (char *)params[0]);
+	printf("PARAM = %s\n", (char *)params[1]);
+	printf("PARAM = %s\n", (char *)params[2]);
+	// printf("PARAM = %s\n", params[3]);
+	// printf("PARAM = %s\n", params[4]);
 
 }
 
@@ -74,3 +75,6 @@ void testingMethod() {
 	
 	}
 }
+
+
+
