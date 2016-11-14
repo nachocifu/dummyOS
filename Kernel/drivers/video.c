@@ -73,7 +73,8 @@ void write(char *str, int length){
 }
 
 void backspace(){
-	char nl = '\b';
+	char nl = '\b'; //Backspace aca lo que hace es meter el character '\b' en el buffer de "read", cuando el user le llega, tiene que hacer el backspace
+					//en su buffer propio.
 	write(&nl, 1);
 }
 

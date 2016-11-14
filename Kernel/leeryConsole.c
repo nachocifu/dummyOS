@@ -81,10 +81,10 @@ void cleanScreen(){
 void printStringStartingAtPointWithLenght(char *str, int x, int y, char color, int lenght){
 
 	for (int index = 0; index < lenght; index++){
-		if (str[index] == '\n'){
+		if (str[index] == '\n'){ //Si a console le llega un '\n', hace un newline.
 			lcNewLine();
 			currentPointer = 0;
-		}else if (str[index] == '\b'){
+		}else if (str[index] == '\b'){ //Si a console le llega un '\b' hace un backspace.
 			lcBackSpace();
 		}else{
 			writeCharacter(str[index], x + index, y, color);
@@ -97,10 +97,10 @@ void printStringStartingAtPoint(char *str, int x, int y, char color){
 	int index = 0;
 
 	while(str[index] != 0){
-		if (str[index] == '\n'){
+		if (str[index] == '\n'){ //Si a console le llega un '\n', hace un newline.
 			lcNewLine();
 			currentPointer = 0;
-		}else if (str[index] == '\b'){
+		}else if (str[index] == '\b'){ //Si a console le llega un '\b' hace un backspace.
 			lcBackSpace();
 		}else{
 			writeCharacter(str[index], x + index, y, color);
@@ -164,7 +164,7 @@ void lcPrint(char *str){
 	}
 }
 
-void lcBackSpace(){
+void lcBackSpace(){ //Este backspace es solo en el video, no cambia nada del buffer.
 
 	int position = (currentPointer-1)*2 + 80*2*24;
 

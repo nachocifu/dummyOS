@@ -143,7 +143,7 @@ void scanf(char *format, ...){
 			if (buffer[i] == '\n'){
 				end = 1; //Si encontre un '\n' entonces el usuario apreto "return", puedo terminar.
 			}
-			if (buffer[i] == '\b'){
+			if (buffer[i] == '\b'){ //Si aca llega un '\b' significa que el usuario apreto backspace y en la consola, visualmente, ya se elimino el character.
 				indexStr--;
 				indexStr--;//Menos 2 porque en caso que haya un backspace en el buffer, tengo que volver a la original del loop y eliminar la anterior.
 			}
