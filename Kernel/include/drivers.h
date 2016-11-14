@@ -11,5 +11,6 @@ void keyboardHandler();
 void write(char *str, int length);
 int read(char* str);
 void newLine();
+void backspace();
 
 // Divers Network

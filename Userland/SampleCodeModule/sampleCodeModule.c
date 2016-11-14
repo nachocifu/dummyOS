@@ -60,11 +60,11 @@ void testingMethod() {
 	
 	while(1){
 		if (valor1 == 0){
-			printf("%s", "Ingrese el valor 1: ");
+			printf("%s", "Por favor ingrese su primer numero. Este numero sera sumado al que proximamente sera solicitado en este pequeno formulario virtual (por favorrrrrrr): ");
 			scanf("%d", &valor1);
 		}
 		if (valor2 == 0){
-			printf("%s", "Ingrese el valor 2: ");
+			printf("%s", "Ingrese el segundo: ");
 			scanf("%d", &valor2);
 		}
 		printf("Su suma es: %d\n", valor1+valor2);
