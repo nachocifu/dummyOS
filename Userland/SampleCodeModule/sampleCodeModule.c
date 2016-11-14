@@ -11,16 +11,26 @@ static int k = 0;
 int main() {
 	//All the following code may be removed 
 
-	printf("Empezo userland");
+	printf("Empezo userland\n");
 
 	char f[10];
 
 
-	
+	int valor1 = 0, valor2 = 0;
 	
 	while(1){
-		scanf(f);
-		printf("Valor: %s", f);
+		if (valor1 == 0){
+			printf("%s", "Ingrese el valor 1: ");
+			scanf("%d", &valor1);
+		}
+		if (valor2 == 0){
+			printf("%s", "Ingrese el valor 2: ");
+			scanf("%d", &valor2);
+		}
+		printf("Su suma es: %d\n", valor1+valor2);
+		valor1 = 0;
+		valor2 = 0;
+
 	
 	}
 	
@@ -32,7 +42,7 @@ int main() {
 	}
 
 
-
+ 
 	//Test if BSS is properly set up
 	if (var1 == 0 && var2 == 0)
 		return 0xDEADC0DE;

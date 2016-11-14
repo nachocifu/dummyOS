@@ -3,4 +3,4 @@
 #include <stdarg.h>
 
 void printf(char *format, ...);
-void scanf(char *str);
+void scanf(char *format, ...);

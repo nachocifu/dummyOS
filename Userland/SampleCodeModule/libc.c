@@ -97,6 +97,24 @@ void printf(char *format, ...){
 	syscall(0, output, indexOutput, 0);
 }
 
+int pow(int base, int exp){
+	int res = 1;
+	for (int i = 0; i < exp; i++){
+		res = res*base;
+	}
+	return res;
+}
+
+int stringToInt(char *str, int lenght){
+	int magnitud = pow(10, lenght-1);
+	int result = 0;
+	for (int i = 0; i < lenght; i++){
+		result = result + ((int)(str[i] - '0'))*magnitud;
+		magnitud = magnitud/10;
+	}
+	return result;
+}
+
 /**
  *La funcion scanf funciona como la clasica funcion de scanf.
  *La particularidad de esta en este proyecto es que para recibir el valor de pantalla hace polling.
@@ -105,10 +123,11 @@ void printf(char *format, ...){
  *En caso que el usuario quiera un "feed" en tiempo real de la pantalla se puede crear otra funcion de tipo scan
  *que simplemente no espere ningun character especial.
  */
-void scanf(char *str){
+void scanf(char *format, ...){
 
 	//TODO: Revisar que el string sea valido y implementar que scan devuelva los valores en los punteros ingresados.
 
+	char str[200]; //Este buffer es el input entero del user.
 	char end = 0;
 	char buffer[10]; //Buffer es un pequeño buffer de los valores que devuelve el syscall read, como lo estoy llamando adentro
 					 //de un loop este buffer nunca se va a llenar mucho entonces su tamaño no es importante.
@@ -127,6 +146,46 @@ void scanf(char *str){
 		}
 	}
 	str[indexStr] = 0; //Pongo un 0 al final del string del usuario para que funcione bien en C.
+
+
+	va_list ap;
+	va_start(ap, 1);
+
+	int index = 0;
+	while(format[index] != 0){
+		if (format[index] == '%'){
+			char type = format[++index];
+			switch(type){
+				case 'c':{
+					char *d = va_arg(ap, char*);
+					*d = str[0];
+					break;
+				}
+				case 'd':{
+					int *d = va_arg(ap, int*);
+					int a = stringToInt(str, indexStr-1); //indexStr es mas largo que el valor porque toma en cuenta el 0.
+					*d = a;
+					break;
+				}
+				case 's':{
+					char *d = va_arg(ap, char*);
+					for (int i = 0; i < indexStr + 1; i++) //El +1 es para que meta el 0 al final.
+						d[i] = str[i];
+					break;
+				}
+				case 'f':{
+					break;
+				}
+				case 'u':{
+					break;
+				}
+			}
+
+		}
+		index++;
+	}
+
+
 }
 
 // static void *ptr = NULL;

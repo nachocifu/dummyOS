@@ -22,8 +22,10 @@ void backspace(){
  *Esta funcion imprime la linea nueva y tambien pone el character limitador en el buffer ('\n').
  */
 void newLine(){
+	
 	char nl = '\n';
 	write(&nl, 1);
+	
 	ncNewline();
 }
 
@@ -63,8 +65,12 @@ void write(char *str, int length){
 		if (startBuffering){ //Si startBuffering esta en true entonces guardo todo lo impreso.
 			buffer[bufferIndex++] = str[i];
 		}
-		if (str[i] != '\n') //Si el character es un '\n' no lo imprimo.
+		if (str[i] != '\n'){ //Si el character es un '\n' no lo imprimo.
 			ncPrintChar(str[i]); //TODO: Si esto es un '\n' imprimo una linea nueva? Es distinto si el user lo envia o si es parte del funcionamiento de read y el buffer.
+		}else{
+			if (startBuffering == FALSE)
+				ncNewline();
+		}
 	}
 }
 
