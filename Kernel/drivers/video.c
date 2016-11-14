@@ -16,10 +16,6 @@ int bufferIndex = 0;
 void clean(){
 
 }
-void backspace(){
-
-}
-
 /**
  *Esta funcion imprime la linea nueva y tambien pone el character limitador en el buffer ('\n').
  */
@@ -76,4 +72,8 @@ void write(char *str, int length){
 	}
 }
 
+void backspace(){
+	char nl = '\b';
+	write(&nl, 1);
+}
 

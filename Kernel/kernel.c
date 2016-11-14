@@ -112,6 +112,7 @@ void miCallbacldeTeclado(uint8_t c, int function){
 			break;
 		}
 		case RESPONSE_BACKSPACE:{
+			backspace();
 			break;
 		}
 		case RESPONSE_ENTER:{

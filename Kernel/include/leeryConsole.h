@@ -7,5 +7,6 @@ void lcPrintInt(int number);
 void lcPrintChar(char c);
 void lcPrint(char *str);
 void lcNewLine();
+void lcBackSpace();
 
 #endif

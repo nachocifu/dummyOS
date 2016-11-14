@@ -143,6 +143,10 @@ void scanf(char *format, ...){
 			if (buffer[i] == '\n'){
 				end = 1; //Si encontre un '\n' entonces el usuario apreto "return", puedo terminar.
 			}
+			if (buffer[i] == '\b'){
+				indexStr--;
+				indexStr--;//Menos 2 porque en caso que haya un backspace en el buffer, tengo que volver a la original del loop y eliminar la anterior.
+			}
 		}
 	}
 	str[indexStr] = 0; //Pongo un 0 al final del string del usuario para que funcione bien en C.

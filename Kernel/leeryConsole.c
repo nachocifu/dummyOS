@@ -84,6 +84,8 @@ void printStringStartingAtPointWithLenght(char *str, int x, int y, char color, i
 		if (str[index] == '\n'){
 			lcNewLine();
 			currentPointer = 0;
+		}else if (str[index] == '\b'){
+			lcBackSpace();
 		}else{
 			writeCharacter(str[index], x + index, y, color);
 			currentPointer++;
@@ -98,6 +100,8 @@ void printStringStartingAtPoint(char *str, int x, int y, char color){
 		if (str[index] == '\n'){
 			lcNewLine();
 			currentPointer = 0;
+		}else if (str[index] == '\b'){
+			lcBackSpace();
 		}else{
 			writeCharacter(str[index], x + index, y, color);
 			currentPointer++;
@@ -160,5 +164,15 @@ void lcPrint(char *str){
 	}
 }
 
+void lcBackSpace(){
+
+	int position = (currentPointer-1)*2 + 80*2*24;
+
+	*(v + position) = ' ';
+	*(v + position + 1) = 0x00;
+
+	currentPointer--;
+
+}
 
 
