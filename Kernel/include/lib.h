@@ -11,4 +11,7 @@ char *cpuVendor(char *result);
 uint16_t in_b(uint16_t reg);
 uint16_t out_b(uint16_t reg, uint16_t val);
 
+uint32_t in_l(uint32_t reg);
+uint32_t out_l(uint32_t reg, uint32_t val);
+
 #endif

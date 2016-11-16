@@ -6,6 +6,8 @@ GLOBAL irq1Handler
 GLOBAL sysCallHandler
 GLOBAL in_b
 GLOBAL out_b
+GLOBAL in_l
+GLOBAL out_l
 
 EXTERN irqDispatcher
 EXTERN sysCallDispacher
@@ -79,6 +81,40 @@ out_b:
 	pop rbp
 	ret
 
+; parametros 1ro registro
+; retorna en al
+
+in_l:
+	push rbp
+	mov rbp, rsp
+
+	xor rax, rax
+
+	mov rdx, rdi
+
+	in eax, dx
+
+	mov rsp, rbp
+	pop rbp
+	ret
+
+; parametros 1ro registro, 2do el valor
+; retorna nada
+
+out_l:
+	push rbp
+	mov rbp, rsp
+
+	xor rax, rax
+
+	mov rdx, rdi
+	mov rax, rsi
+
+	out DX, EAX
+
+	mov rsp, rbp
+	pop rbp
+	ret
 
 sti:
 	sti
