@@ -23,7 +23,7 @@ int main() {
 	// Loop shell until user exits OS
 	while(!exit){
 		char f[100];
-		printf("yourName@dummyOS $ ");
+		printf("user@dummyOS $ ");
 		scanf("%s", &f);
 		char** params = str_split(f);
 		exit = parseCommand(params);
@@ -62,9 +62,8 @@ int parseCommand(char **params) {
 	} else if ( strcmp((char *)params[0], "clear") == 0 ) {
 		for (int i = 0; i < 78; ++i)
 		 printf("\n");
-	} else 
-		printf("Command Not Found !\n");
-
+	}
+	
 	return FALSE;
 
 }
