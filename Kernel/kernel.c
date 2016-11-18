@@ -147,42 +147,44 @@ int main(){
 	setKeyboardCallback(miCallbacldeTeclado);	
 
 	// UserLand Init
-	//((EntryPoint)sampleCodeModuleAddress)();
+	((EntryPoint)sampleCodeModuleAddress)();
 
-	for (int bus = 0; bus < 256; bus++){
-		for (int device = 0; device < 32; device++){
-			for (int function = 0; function < 8; function++){
-				int vendor_id = Read(bus, device, function, 0x00);
-			    int device_id = Read(bus, device, function, 0x02);
+	// for (int bus = 0; bus < 256; bus++){
+	// 	for (int device = 0; device < 32; device++){
+	// 		for (int function = 0; function < 8; function++){
+	// 			int vendor_id = Read(bus, device, function, 0x00);
+	// 		    int device_id = Read(bus, device, function, 0x02);
 
-			    int class_id = Read(bus, device, function, 0x0b);
-			    int subclass_id = Read(bus, device, function, 0x0a);
-			    int interface_id = Read(bus, device, function, 0x09);
+	// 		    int class_id = Read(bus, device, function, 0x0b);
+	// 		    int subclass_id = Read(bus, device, function, 0x0a);
+	// 		    int interface_id = Read(bus, device, function, 0x09);
 
-			    int revision = Read(bus, device, function, 0x08);
-			    int interrupt = Read(bus, device, function, 0x3c);
+	// 		    int revision = Read(bus, device, function, 0x08);
+	// 		    int interrupt = Read(bus, device, function, 0x3c);
 
-			    if ((vendor_id) == 0x10EC){
-			    	ncPrintHex(vendor_id);
-				    ncPrintChar(',');
-				    ncPrintHex(device_id);
-				    ncPrintChar(',');
-				    ncPrintHex(class_id);
-				    ncPrintChar(',');
-				    ncPrintHex(subclass_id);
-				    ncPrintChar(',');
-				    ncPrintHex(interface_id);
-				    ncPrintChar(',');
-				    ncPrintHex(revision);
-				    ncPrintChar(',');
-				    ncPrintHex(interrupt);
-				    ncPrintChar(',');
-				    ncNewline();
-			    }
-			}
-		}
-	}
-	ncNewline();
-	ncPrint("done.");
+	// 		    if ((vendor_id) == 0x10EC){
+	// 		    	ncPrintHex(vendor_id);
+	// 			    ncPrintChar(',');
+	// 			    ncPrintHex(device_id);
+	// 			    ncPrintChar(',');
+	// 			    ncPrintHex(class_id);
+	// 			    ncPrintChar(',');
+	// 			    ncPrintHex(subclass_id);
+	// 			    ncPrintChar(',');
+	// 			    ncPrintHex(interface_id);
+	// 			    ncPrintChar(',');
+	// 			    ncPrintHex(revision);
+	// 			    ncPrintChar(',');
+	// 			    ncPrintHex(interrupt);
+	// 			    ncPrintChar(',');
+	// 			    ncNewline();
+	// 		    }
+	// 		}
+	// 	}
+	// }
+	// ncNewline();
+	// ncPrint("done.");
+
+	return 0;
 }
 
