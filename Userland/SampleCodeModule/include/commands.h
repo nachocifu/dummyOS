@@ -3,7 +3,7 @@
 #define COMMAND_NULL -1
 #define COMMAND_ECHO 0
 #define COMMAND_TIME 1
-#define COMMAND_NET_MSG 2
+#define COMMAND_NET 2
 #define COMMAND_HELP 3
 #define COMMAND_MAN 4
 #define COMMAND_POWEROFF 5

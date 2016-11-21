@@ -13,8 +13,8 @@ int parseCommand(char *commandName) {
 		return COMMAND_ECHO;	
 	else if ( strcmp((char *)commandName, "time") == 0 ) 
 		return COMMAND_TIME;
-	else if ( strcmp((char *)commandName, "net-msg") == 0 ) 
-		return COMMAND_NET_MSG;
+	else if ( strcmp((char *)commandName, "net") == 0 ) 
+		return COMMAND_NET;
 	else if ( strcmp((char *)commandName, "help") == 0 ) 
 		return COMMAND_HELP;
 	else if ( strcmp((char *)commandName, "man") == 0 ) 
@@ -43,22 +43,41 @@ int runCommand(int command, char **params) {
 			printf("%s", (char *)params[2]);
 			printf("%s", (char *)params[3]);
 			printf("%s\n", (char *)params[4]);
+			
 			break;
 		}
 		case COMMAND_TIME: {
 			printf("Printf del tiempo del sistema\n");
 			break;
 		}
-		case COMMAND_NET_MSG: {
-			printf("Net messaging not implemented ! \n");
-			printf("Message Data: \n");
-			printf("    Destination Address: %s \n", (char *)params[1]);
-			printf("    Message: %s \n", strconcat(strconcat(strconcat((char *)params[2], " "), strconcat((char *)params[3], " ")),(char *)params[4]));  
+		case COMMAND_NET: {
+			
+			if (strcmp((char *)params[1], "send") == 0){
+				char buf[1000];
+				printf("Ingrese mensaje: ");
+				scanf("%s", buf);
+				printf("\n");
+				net_send(buf, 0);
+			}else if (strcmp((char *)params[1], "read") == 0){
+				char buf[1000];
+				int size = net_receive(buf);
+				printf("%d\n", size);
+				for (int i = 0; i < size; ++i)
+				{
+					printf("->%d<-", buf[i] );
+				}
+				printf("%s", buf);
+			}
+
+			//printf("Message Data: \n");
+			// printf("    Destination Address: %s \n", (char *)params[1]);
+			//printf("    Message: %s \n", strconcat(strconcat(strconcat((char *)params[2], " "), strconcat((char *)params[3], " ")),(char *)params[4]));  
+			
 			break;
 		}
 		case COMMAND_HELP: {
 			printf("DummyOS Available Commands !\n");
-			printf("net-msg    help    man    time    clear\n");
+			printf("net    help    man    time    clear\n");
 			break;
 		}
 		case COMMAND_MAN: {
@@ -100,8 +119,8 @@ void printManPage (char *commandString) {
 			printf("%s\n", man_time);
 			break;
 		}
-		case COMMAND_NET_MSG: {
-			printf("%s\n", man_net_msg);
+		case COMMAND_NET: {
+			printf("%s\n", man_net);
 			break;
 		}
 		case COMMAND_HELP: {

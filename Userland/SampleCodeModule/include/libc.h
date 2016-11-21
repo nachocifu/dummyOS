@@ -13,3 +13,5 @@ char** str_split(char *str);
 int strcmp(char *a, char *b);
 char* strconcat(char *a, char *b);
 int strlength(char *c);
+void net_send(char *s, int length);
+int net_receive(char *s);

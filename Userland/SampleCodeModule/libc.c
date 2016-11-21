@@ -197,6 +197,14 @@ void scanf(char *format, ...){
 
 }
 
+int net_receive(char *s){
+	return syscall(1, s, 0, 1);
+}
+
+void net_send(char *s, int length){
+	syscall(0, s, 0, 1);
+}
+
 static void* ptr = 0x600000;
 void *malloc(int size){
 	void *ret = ptr;

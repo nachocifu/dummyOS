@@ -104,6 +104,8 @@ int sysCallDispacher(int function, char* segundo, int tercero, int cuarto){
 					break;
 				}
 				case DESCRIPTOR_NET: {
+					char mac[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+					net_send(segundo, mac);
 					break;
 				}
 				default: {
@@ -120,6 +122,7 @@ int sysCallDispacher(int function, char* segundo, int tercero, int cuarto){
 					break;
 				}
 				case DESCRIPTOR_NET: {
+					return net_read(segundo);
 					break;
 				}
 				default: {
@@ -148,23 +151,19 @@ void miCallbacldeTeclado(uint8_t c, int function){
 			break;
 		}
 		case RESPONSE_BACKSPACE:{
-			//backspace();
-			char messageBuff[100];
-			int size = get_message(messageBuff);
-			if (size > 0){
-				for (int i = 0; i < size; i++){
-					lcPrintChar((char)messageBuff[i]);
-				}
-				lcNewLine();
-			}
+			backspace();
+			// char messageBuff[100];
+			// int size = net_read(messageBuff);
+			// if (size > 0){
+			// 	for (int i = 0; i < size; i++){
+			// 		lcPrintChar((char)messageBuff[i]);
+			// 	}
+			// 	lcNewLine();
+			// }
 			break;
 		}
 		case RESPONSE_ENTER:{
-			char mac[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-			net_send("Hola que tal?", mac);
-			//newLine(); //RESPONSE_ENTER es cuando el usuario presiona "return". Llamo a "newLine" del driver de video.
-			// rtl_send("Hola que tal?", -1);
-			//newLine(); //RESPONSE_ENTER es cuando el usuario presiona "return". Llamo a "newLine" del driver de video.
+			newLine(); //RESPONSE_ENTER es cuando el usuario presiona "return". Llamo a "newLine" del driver de video.
 			break;
 		}
 		case RESPONSE_ARROWS:{
@@ -188,7 +187,7 @@ int main(){
 	net_start();
 
 	// UserLand Init
-	//((EntryPoint)sampleCodeModuleAddress)();
+	((EntryPoint)sampleCodeModuleAddress)();
 	//return;
 	
 	

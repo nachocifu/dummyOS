@@ -157,7 +157,7 @@ void lcPrint(char *str){
 
 	while (strlenght(str) > 80){
 		int lastSpace = findLastSpace(str, 80);
-		printStringStartingAtPointWithLenght(str, 0, 24, 0x0F, 80 - lastSpace);
+		printStringStartingAtPointWithLenght(str, currentPointer, 24, 0x0F, 80 - lastSpace);
 		str = str + 80 - lastSpace;
 		if (lastSpace != 0)
 			str = str + 1;
@@ -168,7 +168,7 @@ void lcPrint(char *str){
 
 	int strln = strlenght(str);
 	if (strln < 80){
-		printStringStartingAtPoint(str, 0, 24, 0x0F);
+		printStringStartingAtPoint(str, currentPointer, 24, 0x0F);
 		//moveUp();
 		return;
 	}
