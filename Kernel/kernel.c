@@ -158,18 +158,12 @@ int main(){
 	setKeyboardCallback(miCallbacldeTeclado);	
 
 	// UserLand Init
-<<<<<<< HEAD
 	//((EntryPoint)sampleCodeModuleAddress)();
-
+	//return;
 	
-	dma_start();
-	net_start();
-=======
-	((EntryPoint)sampleCodeModuleAddress)();
-	return;
+	
 	dma_init();
 	rtl_init();
->>>>>>> ccab56eb7c071d555e1456af3196b6e81a7b5e4b
 
 
 	
