@@ -62,7 +62,7 @@ int strlenght(char *c){
 
 void moveUp(){
 	currentPointer = 0;
-	for (int y = 0; y < 25; y++){
+	for (int y = 0; y < 26; y++){
 		for (int x = 0; x < 80; x++){
 			v[x*2 + (y)*2*80] = v[x*2 + (y+1)*2*80];
 			v[x*2 + (y)*2*80 +1] = v[x*2 + (y+1)*2*80 +1];
@@ -86,6 +86,7 @@ void printStringStartingAtPointWithLenght(char *str, int x, int y, char color, i
 			currentPointer = 0;
 		}else if (str[index] == '\b'){ //Si a console le llega un '\b' hace un backspace.
 			lcBackSpace();
+			currentPointer--;
 		}else{
 			writeCharacter(str[index], x + index, y, color);
 			currentPointer++;
@@ -102,12 +103,56 @@ void printStringStartingAtPoint(char *str, int x, int y, char color){
 			currentPointer = 0;
 		}else if (str[index] == '\b'){ //Si a console le llega un '\b' hace un backspace.
 			lcBackSpace();
+			currentPointer--;
 		}else{
 			writeCharacter(str[index], x + index, y, color);
 			currentPointer++;
 		}
 		index++;
 	}
+}
+
+void putCharacter(char c, char color){
+	int position = currentPointer*2 + 80*2*24;
+
+	*(v + position) = c;
+	*(v + position + 1) = color;
+}
+
+void printString(char *str, char color){
+	int index = 0;
+
+	while(str[index] != 0){
+		if (str[index] == '\n'){ //Si a console le llega un '\n', hace un newline.
+			lcNewLine();
+			currentPointer = 0;
+		}else if (str[index] == '\b'){ //Si a console le llega un '\b' hace un backspace.
+			lcBackSpace();
+			currentPointer--;
+		}else{
+			putCharacter(str[index], color);
+			currentPointer++;
+		}
+		index++;
+	}
+
+}
+void printStringLenght(char *str, int lenght, char color){
+	int index = 0;
+
+	for (index = 0; index < lenght; index++){
+		if (str[index] == '\n'){ //Si a console le llega un '\n', hace un newline.
+			lcNewLine();
+			currentPointer = 0;
+		}else if (str[index] == '\b'){ //Si a console le llega un '\b' hace un backspace.
+			lcBackSpace();
+			currentPointer--;
+		}else{
+			putCharacter(str[index], color);
+			currentPointer++;
+		}
+	}
+
 }
 
 
@@ -127,24 +172,17 @@ void writeCharacter(char c, int x, int y, char color){
 
 void lcNewLine(){
 	moveUp();
+	currentPointer = 0;
 }
 
 void lcPrintChar(char c){
-	if (currentPointer >= 80){
-		currentPointer = 0;
-		lcNewLine();
-	}
-	printStringStartingAtPointWithLenght(&c, currentPointer, 24, 0x0F, 1);
+	lcPrint(&c);
 }
 
 void lcPrintHex(uint16_t value){
-	if (currentPointer >= 80){
-		currentPointer = 0;
-		lcNewLine();
-	}
-	char buff[4];
-	uintToBase(value, buff, 16);
-	printStringStartingAtPointWithLenght(buff, currentPointer, 24, 0x0F, 2);
+
+	uintToBase(value, buffer, 16);
+	lcPrint(buffer);
 }
 
 void lcPrintInt(int number){
@@ -153,22 +191,19 @@ void lcPrintInt(int number){
 }
 
 void lcPrint(char *str){
-	
 
-	while (strlenght(str) > 80){
-		int lastSpace = findLastSpace(str, 80);
-		printStringStartingAtPointWithLenght(str, currentPointer, 24, 0x0F, 80 - lastSpace);
-		str = str + 80 - lastSpace;
-		if (lastSpace != 0)
-			str = str + 1;
-
+	while (currentPointer + strlenght(str) > 80){
+		int to = currentPointer;
+		printStringLenght(str, 80 - to, 0x0F);
+		str = str + 80 - to;
 		moveUp();
 	}
 
 
 	int strln = strlenght(str);
-	if (strln < 80){
-		printStringStartingAtPoint(str, currentPointer, 24, 0x0F);
+	if (currentPointer + strln <= 80){
+		printString(str, 0x0F);
+		//currentPointer = currentPointer + strln;
 		//moveUp();
 		return;
 	}
@@ -181,7 +216,6 @@ void lcBackSpace(){ //Este backspace es solo en el video, no cambia nada del buf
 	*(v + position) = ' ';
 	*(v + position + 1) = 0x00;
 
-	currentPointer--;
 
 }
 
