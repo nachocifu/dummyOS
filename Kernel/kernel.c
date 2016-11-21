@@ -122,9 +122,9 @@ void miCallbacldeTeclado(uint8_t c, int function){
 			break;
 		}
 		case RESPONSE_ENTER:{
-			char s[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0};
-			rtl_send("Hola que tal?", 2);
-			ncNewline(); //RESPONSE_ENTER es cuando el usuario presiona "return". Llamo a "newLine" del driver de video.
+			//char s[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0};
+			//rtl_send("Hola que tal?", 2);
+			newLine(); //RESPONSE_ENTER es cuando el usuario presiona "return". Llamo a "newLine" del driver de video.
 			break;
 		}
 		case RESPONSE_ARROWS:{
@@ -156,7 +156,8 @@ int main(){
 	setKeyboardCallback(miCallbacldeTeclado);	
 
 	// UserLand Init
-	//((EntryPoint)sampleCodeModuleAddress)();
+	((EntryPoint)sampleCodeModuleAddress)();
+	return;
 	dma_init();
 	rtl_init();
 
