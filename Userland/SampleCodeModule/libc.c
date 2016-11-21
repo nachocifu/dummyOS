@@ -235,6 +235,13 @@ char** str_split(char *str) {
 	// Count how many spaces
 	int inSpace = FALSE;
 	for (int i = 0; i < length; ++i) {
+		if (currentParam == 4) {
+			if (str[i] != '\n') {
+				params[currentParam][currentParamLength++] = str[i];
+				continue;
+			}
+		}
+
 		if (str[i] != ' ') {
 			if (inSpace) {
 				inSpace = FALSE;
