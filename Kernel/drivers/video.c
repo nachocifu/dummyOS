@@ -24,7 +24,6 @@ void newLine(){
 	char nl = '\n';
 	write(&nl, 1);
 	
-	lcNewLine();
 }
 
 /**
