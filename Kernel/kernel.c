@@ -7,8 +7,7 @@
 #include <drivers.h>
 #include <ethernet.h>
 #include <net.h>
-
-
+#include <syscalls.h>
 
 
 extern uint8_t text;
@@ -87,17 +86,48 @@ void * initializeKernelBinary()
 	return getStackBase();
 }
 
+/**
+Dispatch syscalls to the corresponding functions
 
+@param	function Syscall to call
+@param	segundo Pointer to string
+@param	tercero	Length
+@param	cuarto Decryptor to use
+*/
 int sysCallDispacher(int function, char* segundo, int tercero, int cuarto){
 
 	switch(function){
-		case 0:{
-			write(segundo, tercero);
+		case SYSCALL_WRITE:{
+			switch ( cuarto ) {
+				case DESCRIPTOR_CLI: {
+					write(segundo, tercero);
+					break;
+				}
+				case DESCRIPTOR_NET: {
+					break;
+				}
+				default: {
+					ncPrint("SysCall not found.");
+					break;
+				}
+			}
 			break;
 		}
-		case 1:{
-			int t = read(segundo);
-			return t;
+		case SYSCALL_READ:{
+			switch ( cuarto ) {
+				case DESCRIPTOR_CLI: {
+					return read(segundo);
+					break;
+				}
+				case DESCRIPTOR_NET: {
+					break;
+				}
+				default: {
+					ncPrint("SysCall not found.");
+					break;
+				}
+			}
+			break;
 		}
 		default:{
 			ncPrint("SysCall not found.");

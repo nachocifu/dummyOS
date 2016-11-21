@@ -1,4 +1,5 @@
 #include <libc.h>
+#include <../../../Kernel/include/syscalls.h>
 
 int syscall(int a, int b, int c, int d);
 
@@ -98,7 +99,7 @@ void printf(char *format, ...){
 	output[indexOutput] = 0;
 	va_end(ap);
 	
-	syscall(0, output, indexOutput, 0);
+	syscall(SYSCALL_WRITE, output, indexOutput, DESCRIPTOR_CLI);
 }
 
 int pow(int base, int exp){
@@ -141,7 +142,7 @@ void scanf(char *format, ...){
 	int indexStr = 0;
 
 	while(!end){
-		int lon = syscall(1, buffer, 0, 0); //Llamo a la syscall, me devuelve la longitud de lo devuelto en 'buffer'.
+		int lon = syscall(SYSCALL_READ, buffer, 0, DESCRIPTOR_CLI); //Llamo a la syscall, me devuelve la longitud de lo devuelto en 'buffer'.
 		for (int i = 0; i < lon; i++){
 			str[indexStr++] = buffer[i]; //Concateno buffer al final de 'str'.
 			if (buffer[i] == '\n'){
