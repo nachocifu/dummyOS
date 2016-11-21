@@ -7,9 +7,7 @@
 #include <drivers.h>
 #include <ethernet.h>
 #include <rtl.h>
-
-
-
+#include <kernel.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -91,11 +89,11 @@ void * initializeKernelBinary()
 int sysCallDispacher(int function, char* segundo, int tercero, int cuarto){
 
 	switch(function){
-		case 0:{
+		case SYSCALL_WRITE:{
 			write(segundo, tercero);
 			break;
 		}
-		case 1:{
+		case SYSCALL_READ:{
 			int t = read(segundo);
 			return t;
 		}
