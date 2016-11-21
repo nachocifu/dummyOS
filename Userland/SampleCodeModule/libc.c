@@ -1,10 +1,6 @@
 #include <libc.h>
 #include <../../../Kernel/include/syscalls.h>
 
-// esta es la variable donde se guarda el split_str...esta mal, dsps hay que usar malloc
-// para que no pise en cada llamado
-//char params[MAX_PARAMS_SHELL][15];
-
 uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base){
 	char *p = buffer;
 	char *p1, *p2;
@@ -306,7 +302,7 @@ Compare two strings char to char.
 */
 int strcmp(char *a, char *b) {
 	int index = 0;
-	while (1) {
+	while (TRUE) {
 		if (a[index] == 0 && b[index] == 0)
 			return 0;
 		if (a[index] < b[index] || (a[index] == 0 && b[index] != 0))

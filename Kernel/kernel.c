@@ -19,6 +19,8 @@ extern uint8_t endOfKernel;
 
 static const uint64_t PageSize = 0x1000;
 
+char *videoDeb = (char *) 0xB8000;
+
 static void * const sampleCodeModuleAddress = (void*)0x400000;
 static void * const sampleDataModuleAddress = (void*)0x500000;
 
@@ -172,8 +174,6 @@ void miCallbacldeTeclado(uint8_t c, int function){
 	}
 }
 
-
-char *videoDeb = (char *) 0xB8000;
 int main(){
 
 	// Kernel INIT
@@ -182,28 +182,12 @@ int main(){
 	// Kernel Operations
 	setKeyboardCallback(miCallbacldeTeclado);	
 
-	
+	// Net Init
 	dma_start();
 	net_start();
 
 	// UserLand Init
 	((EntryPoint)sampleCodeModuleAddress)();
-	//return;
-	
-	
-
-
-	
-	
-	char values[] = {'-', '\\', '|', '/'};
-	int val = 0;
-	while(1){
-		videoDeb[0] = values[val++];
-		if (val == 4){val = 0;}
-		int i = 0;
-		while (i < 50000000){i++;}
-	}
-	
 
 	return 0;
 
