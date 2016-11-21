@@ -5,6 +5,11 @@
 #include <naiveConsole.h>
 #include <interruptions.h>
 #include <drivers.h>
+#include <ethernet.h>
+#include <rtl.h>
+
+
+
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -117,7 +122,8 @@ void miCallbacldeTeclado(uint8_t c, int function){
 			break;
 		}
 		case RESPONSE_ENTER:{
-			newLine(); //RESPONSE_ENTER es cuando el usuario presiona "return". Llamo a "newLine" del driver de video.
+			rtl_send("Hola que tal?", -1);
+			//newLine(); //RESPONSE_ENTER es cuando el usuario presiona "return". Llamo a "newLine" del driver de video.
 			break;
 		}
 		case RESPONSE_ARROWS:{
@@ -138,6 +144,8 @@ uint16_t Read(uint16_t bus, uint16_t device, uint16_t function, uint16_t registe
     return (uint16_t)((result >> ((registeroffset & 2) * 8)) & 0xffff);
 }
 
+
+char *videoDeb = (char *) 0xB8000;
 int main(){
 
 	// Kernel INIT
@@ -147,44 +155,65 @@ int main(){
 	setKeyboardCallback(miCallbacldeTeclado);	
 
 	// UserLand Init
-	((EntryPoint)sampleCodeModuleAddress)();
+	//((EntryPoint)sampleCodeModuleAddress)();
+	
+	dma_init();
+	rtl_init();
 
-	// for (int bus = 0; bus < 256; bus++){
-	// 	for (int device = 0; device < 32; device++){
-	// 		for (int function = 0; function < 8; function++){
-	// 			int vendor_id = Read(bus, device, function, 0x00);
-	// 		    int device_id = Read(bus, device, function, 0x02);
 
-	// 		    int class_id = Read(bus, device, function, 0x0b);
-	// 		    int subclass_id = Read(bus, device, function, 0x0a);
-	// 		    int interface_id = Read(bus, device, function, 0x09);
+	
+	char values[] = {'-', '\\', '|', '/'};
+	int val = 0;
+	while(1){
+		videoDeb[0] = values[val++];
+		if (val == 4){val = 0;}
+		int i = 0;
+		while (i < 50000000){i++;}
+	}
+	
 
-	// 		    int revision = Read(bus, device, function, 0x08);
-	// 		    int interrupt = Read(bus, device, function, 0x3c);
+	return;
+	for (int bus = 0; bus < 256; bus++){
+		for (int device = 0; device < 32; device++){
+			for (int function = 0; function < 8; function++){
+				int vendor_id = Read(bus, device, function, 0x00);
+			    int device_id = Read(bus, device, function, 0x02);
 
-	// 		    if ((vendor_id) == 0x10EC){
-	// 		    	ncPrintHex(vendor_id);
-	// 			    ncPrintChar(',');
-	// 			    ncPrintHex(device_id);
-	// 			    ncPrintChar(',');
-	// 			    ncPrintHex(class_id);
-	// 			    ncPrintChar(',');
-	// 			    ncPrintHex(subclass_id);
-	// 			    ncPrintChar(',');
-	// 			    ncPrintHex(interface_id);
-	// 			    ncPrintChar(',');
-	// 			    ncPrintHex(revision);
-	// 			    ncPrintChar(',');
-	// 			    ncPrintHex(interrupt);
-	// 			    ncPrintChar(',');
-	// 			    ncNewline();
-	// 		    }
-	// 		}
-	// 	}
-	// }
-	// ncNewline();
-	// ncPrint("done.");
+			    int class_id = Read(bus, device, function, 0x0b);
+			    int subclass_id = Read(bus, device, function, 0x0a);
+			    int interface_id = Read(bus, device, function, 0x09);
+
+			    int revision = Read(bus, device, function, 0x08);
+			    int interrupt = Read(bus, device, function, 0x3c);
+
+			    if ((vendor_id) == 0x10EC){
+			    	ncPrintHex(vendor_id);
+				    ncPrintChar(',');
+				    ncPrintHex(device_id);
+				    ncPrintChar(',');
+				    ncPrintHex(class_id);
+				    ncPrintChar(',');
+				    ncPrintHex(subclass_id);
+				    ncPrintChar(',');
+				    ncPrintHex(interface_id);
+				    ncPrintChar(',');
+				    ncPrintHex(revision);
+				    ncPrintChar(',');
+				    ncPrintHex(interrupt);
+				    ncPrintChar(',');
+				    ncNewline();
+			    }
+			}
+		}
+	}
+	ncNewline();
+	ncPrint("done.");
+
+	
+
+	
 
 	return 0;
+
 }
 

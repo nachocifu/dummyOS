@@ -8,10 +8,13 @@ void irqDispatcher(int irq);
 
 void sti();
 void setPicMaster(uint16_t);
+void setPicSlave(uint16_t);
 
 void tickHandler();
 void irq0Handler();
 void irq1Handler();
+void irq2Handler();
 void sysCallHandler();
+void rtlHandler();
 
 #endif
