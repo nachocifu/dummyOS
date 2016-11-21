@@ -1,4 +1,5 @@
 #include <rtl.h>
+#include <leeryConsole.h>
 
 #define BUFFER_SIZE 128
 #define BUF_SIZE 64
@@ -195,7 +196,6 @@ void rtl_init(){
 	for(i=0; i < MAC_SIZE ; i++){
 		transmission.frame.hdr.src[i] = sysInByte(IOADDR + i);
 		myMAC[i] = sysInByte(IOADDR + i);
-		ncPrintHex(myMAC[i]);
 	}
 
 
@@ -230,18 +230,18 @@ void rtlHandler(){
 
 	if(isr & TRANSMIT_OK){ 
 		//Transmit OK - No hay que hacer nada
-		ncPrint("Transmited Something!!!!!!!");
-		ncNewline();
+		lcPrint("Transmited Something!!!!!!!");
+		lcNewLine();
 	}else if(isr & RECEIVE_OK){
-		ncPrint("Recived Something: ");
+		lcPrint("Recived Something: ");
 		for (int j = 0; j < 13; j++){
-			ncPrintChar((char)receiveBuffer[RX_DATA_OFFSET + j]);
+			lcPrintChar((char)receiveBuffer[RX_DATA_OFFSET + j]);
 		}
-		ncNewline();
+		lcNewLine();
 	}else{
-		ncPrint("Recived Interrupt with wierd data: ");
-		ncPrintHex(isr);
-		ncNewline();
+		lcPrint("Recived Interrupt with wierd data: ");
+		lcPrintChar(isr);
+		lcNewLine();
 	}
 	
 	rtl_init(); //Reseteo el dispositivo porque si no no anda
@@ -294,6 +294,4 @@ void rtl_send(char * msg, int dst){
 	}
 
 	sysOutLong(tsd, descriptor);
-	ncPrint("Finished sending.");
-	ncNewline();
 }
