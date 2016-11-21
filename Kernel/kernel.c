@@ -122,7 +122,7 @@ void miCallbacldeTeclado(uint8_t c, int function){
 			break;
 		}
 		case RESPONSE_ENTER:{
-			char mac[] = {0x01, 0x02, 0x03, 0x04, 0x5};
+			char mac[] = {0, 0, 0, 0, 0};
 			net_send("Hola que tal?", mac);
 			//newLine(); //RESPONSE_ENTER es cuando el usuario presiona "return". Llamo a "newLine" del driver de video.
 			// rtl_send("Hola que tal?", -1);
@@ -162,8 +162,8 @@ int main(){
 	//return;
 	
 	
-	dma_init();
-	rtl_init();
+	dma_start();
+	net_start();
 
 
 	
