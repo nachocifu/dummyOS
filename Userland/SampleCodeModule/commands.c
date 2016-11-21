@@ -39,9 +39,9 @@ int runCommand(int command, char **params) {
 
 	switch (command) {
 		case COMMAND_ECHO: {
-			printf("%s", (char *)params[1]);
-			printf("%s", (char *)params[2]);
-			printf("%s", (char *)params[3]);
+			printf("%s ", (char *)params[1]);
+			printf("%s ", (char *)params[2]);
+			printf("%s ", (char *)params[3]);
 			printf("%s\n", (char *)params[4]);
 			
 			break;
@@ -68,16 +68,11 @@ int runCommand(int command, char **params) {
 				}
 				printf("%s", buf);
 			}
-
-			//printf("Message Data: \n");
-			// printf("    Destination Address: %s \n", (char *)params[1]);
-			//printf("    Message: %s \n", strconcat(strconcat(strconcat((char *)params[2], " "), strconcat((char *)params[3], " ")),(char *)params[4]));  
-			
 			break;
 		}
 		case COMMAND_HELP: {
 			printf("DummyOS Available Commands !\n");
-			printf("net    help    man    time    clear\n");
+			printf("echo    net    help    man    time    clear\n");
 			break;
 		}
 		case COMMAND_MAN: {
