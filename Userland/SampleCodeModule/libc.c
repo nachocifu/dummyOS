@@ -203,7 +203,7 @@ void *malloc(int size){
 	return ret;
 }
 
-int strlength(char *c){
+int strlength(char *c) {
 	int length = 0;
 	while(*c != 0 && length < 0xFFFFFFFF){
 		length++;

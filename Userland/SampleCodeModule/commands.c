@@ -83,17 +83,51 @@ int runCommand(int command, char **params) {
 	return FALSE;
 }
 
-void printManPage (char *command) {
-	if ( strcmp(command, "net-msg") == 0 ) {
-		printf("%s\n", man_net_msg);
-	} else if ( strcmp(command, "man") == 0 ) {
-		printf("%s\n", man_man);
-	} else if ( strcmp(command, "time") == 0 ) {
-		printf("%s\n", man_time);
-	} else if ( strcmp(command, "help") == 0 ) {
-		printf("%s\n", man_help);
-	} else if ( strcmp(command, "clear") == 0 ) {
-		printf("%s\n", man_clear);
-	} else
-		printf("%s%s\n", man_null, command);
+/**
+Prints man page for the selected command
+
+@param commandString Pointer to string value of command to run
+*/
+void printManPage (char *commandString) {
+	int command = parseCommand (commandString);
+
+	switch (command) {
+		case COMMAND_ECHO: {
+			printf("%s\n", man_echo);
+			break;
+		}
+		case COMMAND_TIME: {
+			printf("%s\n", man_time);
+			break;
+		}
+		case COMMAND_NET_MSG: {
+			printf("%s\n", man_net_msg);
+			break;
+		}
+		case COMMAND_HELP: {
+			printf("%s\n", man_help);
+			break;
+		}
+		case COMMAND_MAN: {
+			printf("%s\n", man_man);
+			break;
+		}
+		case COMMAND_POWEROFF: {
+			printf("%s\n", man_poweroff);
+			break;
+		}
+		case COMMAND_CLEAR: {
+			printf("%s\n", man_clear);
+			break;
+		}
+		case COMMAND_NULL: {
+			if (strlength(commandString) == 0)
+				printf("%s\n", man_null);
+			else
+				printf("%s%s\n", man_invalid, commandString);
+			
+			break;
+		}
+	}
+		
 }
