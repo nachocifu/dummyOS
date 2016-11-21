@@ -196,13 +196,17 @@ void rtlHandler(){
 	net_start(); 
 }
 
+
+
 int net_read(char *b){
 	int index = 0;
-	while (receiveBuffer[index + RX_DATA_OFFSET] != 0){
+	while (receiveBuffer[index + RX_DATA_OFFSET] != 0 && 
+			(isPrintable(receiveBuffer[index + RX_DATA_OFFSET]) || receiveBuffer[index + RX_DATA_OFFSET] == '\n')){
 		b[index] = (char)receiveBuffer[index + RX_DATA_OFFSET];
 		receiveBuffer[index + RX_DATA_OFFSET] = 0;
 		index++;
 	}
+	b[index] = 0;
 	return index;
 }
 

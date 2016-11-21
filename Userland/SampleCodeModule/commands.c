@@ -53,20 +53,22 @@ int runCommand(int command, char **params) {
 		case COMMAND_NET: {
 			
 			if (strcmp((char *)params[1], "send") == 0){
-				char buf[1000];
+				char bufs[1000];
 				printf("Ingrese mensaje: ");
-				scanf("%s", buf);
-				printf("\n");
-				net_send(buf, 0);
+				scanf("%s", bufs);
+				//printf("\n%d\n", strlength(bufs));
+				net_send(bufs, 0);
+				bufs[0] = 0;
 			}else if (strcmp((char *)params[1], "read") == 0){
-				char buf[1000];
-				int size = net_receive(buf);
-				printf("%d\n", size);
-				for (int i = 0; i < size; ++i)
-				{
-					printf("->%d<-", buf[i] );
-				}
-				printf("%s", buf);
+				char bufr[1000];
+				int size = net_receive(bufr);
+				//printf("%d", size);
+				// for (int i = 0; i < size; ++i)
+				// {
+				// 	printf("->%d<-", buf[i] );
+				// }
+				printf("%s", bufr);
+				bufr[0] = 0;
 			}
 			break;
 		}
