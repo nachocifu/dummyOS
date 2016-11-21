@@ -97,7 +97,7 @@ void setKeyboardCallback(void (*f)(uint8_t, int)){ //Esta funcion la usamos para
 }
 
 void keyboardHandler() {
-	uint16_t scancode = in_b(0x60);
+	uint16_t scancode = sysInByte(0x60);
 
 
 	if (isArrow){ //Si anteriormente se recibio un codigo de flecha, (ya que las flechas mandan 2 codigos, uno de flecha y el otro cual espesificamente) entonces entro directamente al switch de ARROWS.

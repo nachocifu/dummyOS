@@ -137,6 +137,16 @@ void lcPrintChar(char c){
 	printStringStartingAtPointWithLenght(&c, currentPointer, 24, 0x0F, 1);
 }
 
+void lcPrintHex(uint16_t value){
+	if (currentPointer >= 80){
+		currentPointer = 0;
+		lcNewLine();
+	}
+	char buff[4];
+	uintToBase(value, buff, 16);
+	printStringStartingAtPointWithLenght(buff, currentPointer, 24, 0x0F, 2);
+}
+
 void lcPrintInt(int number){
 	uintToBase((uint64_t)number, buffer, 10);
 	lcPrint(buffer);
