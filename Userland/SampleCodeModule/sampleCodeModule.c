@@ -26,8 +26,9 @@ int main() {
 Welcoming sign of the OS
 */
 void initWelcome () {
+	runCommand(COMMAND_CLEAR, "null");
 	printf(
-		"    *****************************************\n*                                       *\n*        Welcome To DummyOS             *\n*                                       *\n*****************************************\n"
+		"    *****************************************\n*                                       *\n*        Welcome To DummyOS             *\n*                                       *\n*****************************************\n\n\n"
 		);
 	return;
 }
