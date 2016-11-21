@@ -208,5 +208,12 @@ int main(){
 	}
 	ncNewline();
 	ncPrint("done.");
+
+	
+
+	
+
+	return 0;
+
 }
 

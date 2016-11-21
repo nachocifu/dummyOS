@@ -214,58 +214,62 @@ int strlength(char *c){
 char *params[5];
 char** str_split(char *str) {
 	
-	
-	
-
 	for (int i = 0; i < 5; i++){
 		params[i] = malloc(15*4);
 	}
 
-	params[0][0] = 'a';
-	params[0][1] = 0;
-	params[1][0] = 'b';
-	params[1][1] = 0;
-	params[2][0] = 'c';
-	params[2][1] = 0;
-	params[3][0] = 'd';
-	params[3][1] = 0;
-	params[4][0] = 'e';
-	params[4][1] = 0;
+	int currentParam = 0; 
+	int currentParamLength = 0;
 
-	// int currentParam = 0;
-	// int currentParamLength = 0;
-
-	// int length = strlength(str);
+	int length = strlength(str);
 	
-	// // Count how many spaces
-	// int inSpace = FALSE;
-	// for (int i = 0; i < length; ++i) {
-	// 	if (str[i] != ' ') {
-	// 		if (inSpace) {
-	// 			inSpace = FALSE;
-	// 			params[currentParam][currentParamLength] = 0;
-	// 			currentParam++;
-	// 			currentParamLength = 0;
+	// Count how many spaces
+	int inSpace = FALSE;
+	for (int i = 0; i < length; ++i) {
+		if (str[i] != ' ') {
+			if (inSpace) {
+				inSpace = FALSE;
+				params[currentParam][currentParamLength] = 0;
+				currentParam++;
+				currentParamLength = 0;
 				
-	// 		}
-	// 		if (str[i] != '\n') {
-	// 			params[currentParam][currentParamLength++] = str[i];
-	// 		}
-	// 	} else {
-	// 		inSpace = TRUE;
-	// 	}
-	// }
-	// params[currentParam][currentParamLength] = 0;
+			}
+			if (str[i] != '\n') {
+				params[currentParam][currentParamLength++] = str[i];
+			}
+		} else {
+			inSpace = TRUE;
+		}
+	}
+	params[currentParam][currentParamLength] = 0;
 
-	printf("adPARAM = %s\n", params[0]);
-	printf("adPARAM = %s\n", params[1]);
-	printf("adPARAM = %s\n", params[2]);
-	printf("adPARAM = %s\n", params[3]);
-	printf("adPARAM = %s\n", params[4]);
-
-	
-	
 	return params;
+}
+
+int strcmp(char *a, char *b) {
+	int index = 0;
+	while (1) {
+		if (a[index] == 0 && b[index] == 0)
+			return 0;
+		if (a[index] < b[index] || (a[index] == 0 && b[index] != 0))
+			return -1;
+		if (a[index] > b[index] || (a[index] != 0 && b[index] == 0))
+			return 1;
+		index++;
+	}
+}
+
+char* strconcat(char *a, char *b) {
+	int lengthA = strlength(a);
+	int lengthB = strlength(b);
+	char *str = (char *)malloc( (lengthA+lengthB) * 4);
+	for (int i = 0; i < lengthA ; ++i) {
+		str[i] = a[i];
+	}
+	for (int i = lengthA ; (i-lengthA) < lengthB; ++i) {
+		str[i] = b[i-lengthA];
+	}
+	return str; 
 }
 
 
