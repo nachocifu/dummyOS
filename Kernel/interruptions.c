@@ -21,17 +21,19 @@ static IDTEntry_t* IDT = (IDTEntry_t*) 0x0;
 
 typedef void (*handler_t)(void);
 
-handler_t handlers[] = {tickHandler, keyboardHandler};
+handler_t handlers[] = {tickHandler, keyboardHandler, rtlHandler};
 
 
 
 void init_interruptions() {
 
-	setPicMaster(0xFD); //esto le dice al PIC que solo escuche interrupciones de PIT (clock) no de teclado ni nadie mas
+	setPicMaster(0x01); //esto le dice al PIC que solo escuche interrupciones de PIT (clock) no de teclado ni nadie mas
+	setPicSlave(0x00);
 
 	iSetHandler(0x20, (uint64_t) irq0Handler); //TIC
 	iSetHandler(0x21, (uint64_t) irq1Handler); //Keyboard...
 	iSetHandler(0x80, (uint64_t) sysCallHandler); //Syscalls...
+	iSetHandler(0x2B, (uint64_t) irq2Handler); //Syscalls...
 
 	sti();
 }
@@ -59,6 +61,6 @@ void irqDispatcher(int irq) {
 char *video = (char *) 0xB8000;
 static int videoIndex = 0;
 void tickHandler() {
-	video[videoIndex++] = videoIndex;	
+	//video[videoIndex++] = videoIndex;	
 }
 

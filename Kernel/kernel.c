@@ -5,6 +5,11 @@
 #include <naiveConsole.h>
 #include <interruptions.h>
 #include <drivers.h>
+#include <ethernet.h>
+#include <rtl.h>
+
+
+
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -117,7 +122,9 @@ void miCallbacldeTeclado(uint8_t c, int function){
 			break;
 		}
 		case RESPONSE_ENTER:{
-			newLine(); //RESPONSE_ENTER es cuando el usuario presiona "return". Llamo a "newLine" del driver de video.
+			char s[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0};
+			rtl_send("Hola que tal?", 2);
+			ncNewline(); //RESPONSE_ENTER es cuando el usuario presiona "return". Llamo a "newLine" del driver de video.
 			break;
 		}
 		case RESPONSE_ARROWS:{
@@ -138,6 +145,8 @@ uint16_t Read(uint16_t bus, uint16_t device, uint16_t function, uint16_t registe
     return (uint16_t)((result >> ((registeroffset & 2) * 8)) & 0xffff);
 }
 
+
+char *videoDeb = (char *) 0xB8000;
 int main(){
 
 	// Kernel INIT
@@ -148,7 +157,22 @@ int main(){
 
 	// UserLand Init
 	//((EntryPoint)sampleCodeModuleAddress)();
+	dma_init();
+	rtl_init();
 
+
+	
+	char values[] = {'-', '\\', '|', '/'};
+	int val = 0;
+	while(1){
+		videoDeb[0] = values[val++];
+		if (val == 4){val = 0;}
+		int i = 0;
+		while (i < 50000000){i++;}
+	}
+	
+
+	return;
 	for (int bus = 0; bus < 256; bus++){
 		for (int device = 0; device < 32; device++){
 			for (int function = 0; function < 8; function++){
