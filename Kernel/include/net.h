@@ -1,5 +1,5 @@
-#ifndef __RTL_H
-#define __RTL_H
+#ifndef __NET_H
+#define __NET_H
 
 #include <stdint.h>
 #include <string.h>
@@ -11,8 +11,8 @@
 #include <ethernet.h>
 
 
-
-void net_send(char *msg, char *mac);
 void net_start();
+void net_send(char *msg, char *mac);
+int net_read(char *b);
 
 #endif

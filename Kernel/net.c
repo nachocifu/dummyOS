@@ -1,4 +1,4 @@
-#include <rtl.h>
+#include <net.h>
 #include <leeryConsole.h>
 
 #define BUFFER_SIZE 128
@@ -171,24 +171,24 @@ void rtlHandler(){
 
 	switch(isr){
 		case TRANSMIT_OK:{
-			lcPrint("Transmited Something!!!!!!!");
-			lcNewLine();
+			//lcPrint("Transmited Something!!!!!!!");
+			//lcNewLine();
 			break;
 		}
 		case RECEIVE_OK:{
-			lcPrint("Recived Something: ");
-			int index = 0;
-			while (receiveBuffer[index + RX_DATA_OFFSET] != 0){
-				lcPrintChar((char)receiveBuffer[index + RX_DATA_OFFSET]);
-				index++;
-			}
-			lcNewLine();
+			//lcPrint("Recived Something: ");
+			//int index = 0;
+			//while (receiveBuffer[index + RX_DATA_OFFSET] != 0){
+				//lcPrintChar((char)receiveBuffer[index + RX_DATA_OFFSET]);
+				//index++;
+			//}
+			//lcNewLine();
 			break;
 		}
 		default:{
-			lcPrint("Recived Interrupt with wierd data: ");
-			lcPrintChar(isr);
-			lcNewLine();
+			//lcPrint("Recived Interrupt with wierd data: ");
+			//lcPrintChar(isr);
+			//lcNewLine();
 			break;
 		}
 	}
@@ -196,29 +196,30 @@ void rtlHandler(){
 	net_start(); 
 }
 
+int net_read(char *b){
+	int index = 0;
+	while (receiveBuffer[index + RX_DATA_OFFSET] != 0){
+		b[index] = (char)receiveBuffer[index + RX_DATA_OFFSET];
+		receiveBuffer[index + RX_DATA_OFFSET] = 0;
+		index++;
+	}
+	return index;
+}
+
 void net_send(char *msg, char *mac){
 
-	for (int i = 0; i < MAC_SIZE; i++){
+	for (int i = 0; i < MAC_SIZE; i++)
 		frame.hdr.dst[i] = mac[i];
-	}
 	
+	memcpy(frame.data, msg, mystrlen(msg)); //Data
 
-	uint32_t tsd = TSD0;
-	uint32_t tsad = TSAD0;
+	frame.hdr.proto = ETH_P_802_3; //Protocolo
 
-
-	frame.hdr.proto = ETH_P_802_3; //Dummy type
-
-	memcpy(frame.data, msg, mystrlen(msg));
-
-
-	uint32_t descriptor = ETH_HLEN + mystrlen(msg); //Bits 0-12: Size
-	descriptor &= ~(TSD_OWN); //Apago el bit 13 TSD_OWN
-	descriptor &= ~(0x3f << 16);	// 21-16 threshold en 0
+	uint32_t size = ETH_HLEN + mystrlen(msg); //Tamano de la transmision.
 	
-	while (!(sysInLong(tsd) & TSD_OWN)){ }
+	while (!(sysInLong(TSD0) & TSD_OWN)){ }
 
-	sysOutLong(tsd, descriptor);
+	sysOutLong(TSD0, size);
 }
 
 
