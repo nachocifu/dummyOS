@@ -1,8 +1,6 @@
 #include <libc.h>
 #include <../../../Kernel/include/syscalls.h>
 
-int syscall(int a, int b, int c, int d);
-
 // esta es la variable donde se guarda el split_str...esta mal, dsps hay que usar malloc
 // para que no pise en cada llamado
 //char params[MAX_PARAMS_SHELL][15];
@@ -39,7 +37,12 @@ uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base){
 	return digits;
 }
 
+/**
+Send formated string to the cli descriptor
 
+@param *format Pointer to the format string
+@param ... Params
+*/
 void printf(char *format, ...){
 	
 	//TODO: Revisar que el string es correcto.
@@ -102,6 +105,13 @@ void printf(char *format, ...){
 	syscall(SYSCALL_WRITE, output, indexOutput, DESCRIPTOR_CLI);
 }
 
+/**
+Calculate base to the power of exp
+
+@param base The base number
+@param exp The exponent number
+@return int The result
+*/
 int pow(int base, int exp){
 	int res = 1;
 	for (int i = 0; i < exp; i++){
@@ -197,12 +207,23 @@ void scanf(char *format, ...){
 
 }
 
+/**
+Read string from the net buffer
+
+@param *s Pointer where to write string
+*/
 int net_receive(char *s){
-	return syscall(1, s, 0, 1);
+	return syscall(SYSCALL_READ, s, 0, DESCRIPTOR_NET);
 }
 
+/**
+Send string to the net descriptor
+
+@param *s Pointer to the string to send
+@param length The length of the string
+*/
 void net_send(char *s, int length){
-	syscall(0, s, 0, 1);
+	syscall(SYSCALL_WRITE, s, 0, DESCRIPTOR_NET);
 }
 
 static void* ptr = 0x600000;
@@ -212,6 +233,12 @@ void *malloc(int size){
 	return ret;
 }
 
+/**
+Calculate string length
+
+@param *c String to measure
+@return int String length
+*/
 int strlength(char *c) {
 	int length = 0;
 	while(*c != 0 && length < 0xFFFFFFFF){
@@ -220,6 +247,14 @@ int strlength(char *c) {
 	}
 	return length;
 }
+
+/**
+Splits string by spaces into 5 strings.
+After the fith string, concatenate to the last splited string.
+
+@param str String to split by space character
+@return char** Pointer to array of strings
+*/
 char *params[5];
 char** str_split(char *str) {
 	
@@ -262,6 +297,13 @@ char** str_split(char *str) {
 	return params;
 }
 
+/**
+Compare two strings char to char.
+
+@param a Pointer to first string
+@param b Pointer to second string
+@return int 0 if strings are equal
+*/
 int strcmp(char *a, char *b) {
 	int index = 0;
 	while (1) {
@@ -275,6 +317,13 @@ int strcmp(char *a, char *b) {
 	}
 }
 
+/**
+Concatenate two strings
+
+@param a Pointer to first string
+@param b Pointer to second string
+@return char* Pointer to concatenated string
+*/
 char* strconcat(char *a, char *b) {
 	int lengthA = strlength(a);
 	int lengthB = strlength(b);

@@ -68,11 +68,6 @@ int runCommand(int command, char **params) {
 				}
 				printf("%s", buf);
 			}
-
-			//printf("Message Data: \n");
-			// printf("    Destination Address: %s \n", (char *)params[1]);
-			//printf("    Message: %s \n", strconcat(strconcat(strconcat((char *)params[2], " "), strconcat((char *)params[3], " ")),(char *)params[4]));  
-			
 			break;
 		}
 		case COMMAND_HELP: {
