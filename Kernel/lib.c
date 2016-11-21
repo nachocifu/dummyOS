@@ -1,5 +1,14 @@
 #include <stdint.h>
 
+int mystrlen(char *s){
+	int c = 0;
+	while(*(s++) != 0){
+		c++;
+	}
+
+	return c;
+}
+
 void * memset(void * destination, int32_t c, uint64_t length)
 {
 	uint8_t chr = (uint8_t)c;

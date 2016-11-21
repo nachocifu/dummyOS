@@ -8,5 +8,6 @@ void lcPrintChar(char c);
 void lcPrint(char *str);
 void lcNewLine();
 void lcBackSpace();
+void lcPrintHex(uint16_t value);
 
 #endif

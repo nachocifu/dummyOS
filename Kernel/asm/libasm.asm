@@ -6,10 +6,6 @@ GLOBAL irq0Handler
 GLOBAL irq1Handler
 GLOBAL irq2Handler
 GLOBAL sysCallHandler
-GLOBAL in_b
-GLOBAL out_b
-GLOBAL in_l
-GLOBAL out_l
 GLOBAL sysOutLong
 GLOBAL sysInLong
 GLOBAL sysInByte
@@ -17,8 +13,6 @@ GLOBAL sysInWord
 GLOBAL sysOutWord
 GLOBAL sysOutByte
 
-GLOBAL os_pci_read_reg
-GLOBAL os_pci_write_reg
 
 EXTERN irqDispatcher
 EXTERN sysCallDispacher
@@ -27,68 +21,14 @@ EXTERN sysCallDispacher
 
 section .text
 
-; -----------------------------------------------------------------------------
-; os_pci_read_reg -- Read a register from a PCI device
-;  IN:	BL  = Bus number
-;	CL  = Device/Function number
-;	DL  = Register number
-; OUT:	EAX = Register information
-;	All other registers preserved
-; Data form is binary 10000000 bbbbbbbb dddddfff rrrrrr00
-os_pci_read_reg:
-	push rdx
-	push rcx
-	push rbx
-
-	shl ebx, 16			; Move Bus to bits 23 - 16
-	shl ecx, 8			; Move Device/Function to bits 15 - 8
-	mov bx, cx
-	shl edx, 2			; Move Register to bits 7 - 2
-	mov bl, dl
-	and ebx, 0x00ffffff		; Clear bits 31 - 24
-	or ebx, 0x80000000		; Set bit 31
-	mov eax, ebx
-	mov dx, PCI_CONFIG_ADDRESS
-	out dx, eax
-	mov dx, PCI_CONFIG_DATA
-	in eax, dx
-
-	pop rbx
-	pop rcx
-	pop rdx
-	ret
-; -----------------------------------------------------------------------------
-
-
-os_pci_write_reg:
-	push rbx
-	push rcx
-
-	mov rbx, rdi
-	mov rcx, rsi
-
-	shl ebx, 16			; Move Bus to bits 23 - 16
-	shl ecx, 8			; Move Device/Function to bits 15 - 8
-	mov bx, cx
-	mov bl, dl
-	and ebx, 0x00ffffff		; Clear bits 31 - 24
-	or ebx, 0x80000000		; Set bit 31
-	mov eax, ebx
-	mov dx, PCI_CONFIG_ADDRESS
-	out dx, eax
-	mov dx, PCI_CONFIG_DATA
-	pop rax
-	out dx, eax
-
-	pop rbx
-	ret
-
+; Los nombres de sysOutLong, sysOutWord, sysOutByte, sysInLong, sysOutWord y sysInByte son sacados de OSDev.
+; Esta funcion habla con los perifericos.
+; Se le pasa por 'rdi' el address de 16 bits y por rsi la data de 32 bits.
 sysOutLong:
 	push rbx
 	push rax 
 
 	mov rbx, rdi
-	and rbx, 0xFFFF ;16 bits
 
 	mov rax, rsi
 
@@ -101,33 +41,30 @@ sysOutLong:
 	ret
 
 
-;    sysOutLong( uint16_t addr, uint32 data);
-;                      RDI          RSI
+; Esta funcion habla con los perifericos.
+; Se le pasa por 'rdi' el address de 16 bits y por rsi la data de 16 bits.
 sysOutWord:
 	push rbx
 	push rax 
 
 	mov rbx, rdi
-	and rbx, 0xFFFF ;16 bits
 
 	mov rax, rsi
 
 	mov dx, bx
 	out dx, ax
 	
-
 	pop rax
 	pop rbx
 	ret
 
-;    sysOutLong( uint16_t addr, uint32 data);
-;                      RDI          RSI
+; Esta funcion habla con los perifericos.
+; Se le pasa por 'rdi' el address de 16 bits y por rsi la data de 8 bits.
 sysOutByte:
 	push rbx
 	push rax 
 
 	mov rbx, rdi
-	and rbx, 0xFFFF ;16 bits
 
 	mov rax, rsi
 
@@ -139,17 +76,12 @@ sysOutByte:
 	pop rbx
 	ret
 
-
-
-
-;sysInLong( uint16_t addr);
-;                 RDI
-;
+; Esta funcion habla con los perifericos.
+; Se le pasa por 'rdi' el address de 16 bits y devuelve por 'eax' un valor de 32 bits.
 sysInLong:
 	push rbx
 
 	mov rbx, rdi
-	and rbx, 0xFFFF ;16 bits
 
 	mov rax, rsi
 
@@ -160,30 +92,8 @@ sysInLong:
 
 	ret
 
-
-;sysInByte( uint16_t addr);
-;                 RDI
-;
-sysInByte:
-	push rbx
-
-	mov rbx, rdi
-	and rbx, 0xFFFF ;16 bits
-
-	mov rax, rsi
-
-	mov dx, bx
-	in al, dx
-	and rax, 0xff;
-	
-	pop rbx
-
-	ret
-
-
-;sysInByte( uint16_t addr);
-;                 RDI
-;
+; Esta funcion habla con los perifericos.
+; Se le pasa por 'rdi' el address de 16 bits y devuelve por 'eax' un valor de 16 bits.
 sysInWord:
 	push rbx
 
@@ -199,6 +109,25 @@ sysInWord:
 	pop rbx
 
 	ret
+
+
+; Esta funcion habla con los perifericos.
+; Se le pasa por 'rdi' el address de 16 bits y devuelve por 'eax' un valor de 8 bits.
+sysInByte:
+	push rbx
+
+	mov rbx, rdi
+
+	mov rax, rsi
+
+	mov dx, bx
+	in al, dx
+	and rax, 0xff;
+	
+	pop rbx
+
+	ret
+
 
 irq0Handler:
 	irqHandler 0
@@ -236,72 +165,6 @@ sysCallHandler:
 ; parametros 1ro registro
 ; retorna en al
 
-in_b:
-	push rbp
-	mov rbp, rsp
-
-	xor rax, rax
-
-	mov rdx, rdi
-
-	in al, dx
-
-	mov rsp, rbp
-	pop rbp
-	ret
-
-; parametros 1ro registro, 2do el valor
-; retorna nada
-
-out_b:
-	push rbp
-	mov rbp, rsp
-
-	xor rax, rax
-
-	mov rdx, rdi
-	mov rax, rsi
-
-	out dx, al
-
-	mov rsp, rbp
-	pop rbp
-	ret
-
-; parametros 1ro registro
-; retorna en al
-
-in_l:
-	push rbp
-	mov rbp, rsp
-
-	xor rax, rax
-
-	mov rdx, rdi
-
-	in eax, dx
-
-	mov rsp, rbp
-	pop rbp
-	ret
-
-; parametros 1ro registro, 2do el valor
-; retorna nada
-
-out_l:
-	push rbp
-	mov rbp, rsp
-
-	xor rax, rax
-
-	mov rdx, rdi
-	mov rax, rsi
-
-	out DX, EAX
-
-	mov rsp, rbp
-	pop rbp
-	ret
 
 sti:
 	sti

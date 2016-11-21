@@ -12,7 +12,7 @@
 
 
 
-void rtlSend();
-void rtl_init();
+void net_send(char *msg, char *mac);
+void net_start();
 
 #endif
