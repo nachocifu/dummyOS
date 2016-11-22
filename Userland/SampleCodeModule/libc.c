@@ -216,9 +216,9 @@ int net_receive(char *s){
 Send string to the net descriptor
 
 @param *s Pointer to the string to send
-@param length The length of the string
+
 */
-void net_send(char *s, int length){
+void net_send(char *s){
 	syscall(SYSCALL_WRITE, s, 0, DESCRIPTOR_NET);
 }
 

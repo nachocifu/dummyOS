@@ -1,67 +1,35 @@
 #include <net.h>
 #include <leeryConsole.h>
 
-#define BUFFER_SIZE 128
-#define BUF_SIZE 64
-#define PROTO_SIZE 6
-#define MSG_BUF_SIZE 100
-#define MAX_MSG_SIZE 512
 
-#define IOADDR 0xC000
+#define IOADDR 0xC000 //Direccion de la placa
 
-#define TSAD0 (IOADDR + 0x20)
-#define TSAD1 (IOADDR + 0x24)
-#define TSAD2 (IOADDR + 0x28)
-#define TSAD3 (IOADDR + 0x2C)
+#define TSAD0 (IOADDR + 0x20) //En este registro escribo la direccion de memoria a transmitir.
+#define TSD0 (IOADDR + 0x10) //En este registro escribo la longitud del mensaje a transmitir.
 
-#define TSD0 (IOADDR + 0x10)
-#define TSD1 (IOADDR + 0x14)
-#define TSD2 (IOADDR + 0x18)
-#define TSD3 (IOADDR + 0x1C)
+#define ISR (IOADDR + 0x3E) //ISR es el registro de estado que quiero ver lo que hizo la placa.
 
-#define ISR (IOADDR + 0x3E) 
+#define TSD_OWN (1 << 13) //Este es el valor del registro de estado que quiero que no este para poder transmitir.
 
+#define RECEIVE_OK 1
+#define TRANSMIT_OK (1 << 2)
 
-#define TX_SW_BUFFER_NUM 4
-#define TSD_TOK (1 << 15)
-#define TSD_OWN (1 << 13)
+#define RX_OVERHEAD 4 //De protocolo de ethernet.
+#define RX_DATA_OFFSET (RX_OVERHEAD + ETH_HLEN) //De protocolo de ethernet.
 
+#define BUFFER_SIZE 8*1024+16
 
-//Bitflags del ISR
-#define TRANSMIT_OK  	(1 << 2)
-#define RECEIVE_OK 		1
-#define ISR_ERROR		(1<<1 | 1<<3)
-
-
-#define BUF_SIZE 8*1024+16
 #define MAC_SIZE 6
-#define PROTO_SIZE 6
-#define MSG_BUF_SIZE 100
-#define MAX_MSG_SIZE 512
+#define MAC_STRING_LENGHT 17
 
 
-
-#define RX_HEADER_SIZE 4
-#define RX_DATA_OFFSET (RX_HEADER_SIZE + ETH_HLEN) //Aca arranca la data posta en el frame ethernet 
-											//(antes 4 bytes de header + 2 macs + 2 de proto)
-#define USER_BYTE_OFFSET (RX_HEADER_SIZE + MAC_SIZE + MAC_SIZE - 1) //Ultimo byte de la MAC de origen
-
-
-#define TRUE 1
-#define FALSE 0
-
-
-/*
-	Este es el frame que se usa para enviar 
-*/
-
-static uint8_t myMac[6];
-
-
-ethframe frame;
+ethframe frame; //Este es el frame que se usa para transmitir. 
 	
+static uint8_t myMac[6]; //Mi mac.
+static char macString[MAC_STRING_LENGHT + 1]; //Mi mac en formato FF:FF:FF:FF:FF:FF
+static char* macBroadcast = "FF:FF:FF:FF:FF:FF"; //Direccion de brodcast para comparar.
 
-static uint8_t receiveBuffer[BUF_SIZE] = {0};
+static uint8_t receiveBuffer[BUFFER_SIZE] = {0}; //Mi buffer de recepcion.
 
 
 /**
@@ -155,8 +123,21 @@ void net_start(){
 
 
 	for(int i = 0; i < MAC_SIZE ; i++){
-		frame.hdr.src[i] = sysInByte(IOADDR + i); //Saco la mac del registro 0x00 y lo guardo en el frame ethernet.
-		myMac[i] = sysInByte(IOADDR + i); //Guardo en memoria local.
+		unsigned char readByte = sysInByte(IOADDR + i);
+		frame.hdr.src[i] = readByte; //Saco la mac del registro 0x00 y lo guardo en el frame ethernet.
+		myMac[i] = readByte; //Guardo en memoria local.
+		macString[i*3] = ((readByte / 16) >= 9) ? (readByte / 16) + 'A' - 10 : (readByte / 16) + '0';
+		macString[i*3 + 1] = ((readByte % 16) >= 9) ? (readByte % 16) + 'A' - 10 : (readByte % 16) + '0';
+		macString[i*3 + 2] = ':';
+	}
+}
+
+void checkAddress(){
+	if (macEqual(macString, (char *)&receiveBuffer[RX_DATA_OFFSET]) //Esto se fija si el mensaje es para mi o broadcast.
+		|| macEqual(macBroadcast, (char *)&receiveBuffer[RX_DATA_OFFSET])){
+		//Do nothing.
+	}else{
+		receiveBuffer[RX_DATA_OFFSET] = 0; //No es para mi, buffer a 0.
 	}
 }
 
@@ -171,24 +152,16 @@ void rtlHandler(){
 
 	switch(isr){
 		case TRANSMIT_OK:{
-			//lcPrint("Transmited Something!!!!!!!");
-			//lcNewLine();
+			//Do nothing.
 			break;
 		}
 		case RECEIVE_OK:{
-			//lcPrint("Recived Something: ");
-			//int index = 0;
-			//while (receiveBuffer[index + RX_DATA_OFFSET] != 0){
-				//lcPrintChar((char)receiveBuffer[index + RX_DATA_OFFSET]);
-				//index++;
-			//}
-			//lcNewLine();
+			//Es para mi?
+			checkAddress();
 			break;
 		}
 		default:{
-			//lcPrint("Recived Interrupt with wierd data: ");
-			//lcPrintChar(isr);
-			//lcNewLine();
+			//Do nothing.
 			break;
 		}
 	}
@@ -196,24 +169,53 @@ void rtlHandler(){
 	net_start(); 
 }
 
-
-
-int net_read(char *b){
-	int index = 0;
-	while (receiveBuffer[index + RX_DATA_OFFSET] != 0 && 
-			(isPrintable(receiveBuffer[index + RX_DATA_OFFSET]) || receiveBuffer[index + RX_DATA_OFFSET] == '\n')){
-		b[index] = (char)receiveBuffer[index + RX_DATA_OFFSET];
-		receiveBuffer[index + RX_DATA_OFFSET] = 0;
-		index++;
+//Compara strings de MAC de formato FF:FF:FF:FF:FF:FF
+int macEqual(char *m1, char *m2){
+	for (int i = 0; i < MAC_STRING_LENGHT; ++i){
+		if (m1[i] != m2[i])
+			return 0;
 	}
-	b[index] = 0;
-	return index;
+	return 1;
 }
 
-void net_send(char *msg, char *mac){
+/**
+	Protocolo: FF:FF:FF:FF:FF:FF[Mensaje].
+	Esta funcion recive un vector al cual tengo que llenar si hay un mensaje dispoinble en el buffer para mi.
+	Devuelve la longitud de lo devuelto.
+*/
+int net_read(char *b){
+	int index = 0;
+
+	//Este loop se fija si llegue al final del mensaje y si todo lo que llego es imprimible, byte por byte.
+	while (receiveBuffer[index + RX_DATA_OFFSET + MAC_STRING_LENGHT] != 0 && 
+			(isPrintable(receiveBuffer[index + RX_DATA_OFFSET + MAC_STRING_LENGHT]) || 
+				receiveBuffer[index + RX_DATA_OFFSET + MAC_STRING_LENGHT] == '\n')){
+		
+		b[index] = (char)receiveBuffer[index + RX_DATA_OFFSET + MAC_STRING_LENGHT];
+		receiveBuffer[index + RX_DATA_OFFSET + MAC_STRING_LENGHT] = 0; //Limpia el buffer mientras lo lee.
+
+		index++;
+	}
+
+	if (macEqual(macString, (char *)&receiveBuffer[RX_DATA_OFFSET])  //Esto se fija si el mensaje es para mi o broadcast.
+		|| macEqual(macBroadcast, (char *)&receiveBuffer[RX_DATA_OFFSET])){
+
+		b[index] = 0; //Terminacion en 0 para C.
+		return index;
+	}else{
+		b[0] = 0; //No es para mi, devuelvo 0.
+		return 0;
+	}
+	
+}
+/**
+	Protocolo: FF:FF:FF:FF:FF:FF[Mensaje].
+	Esta funcion envia a la red.
+*/
+void net_send(char *msg){
 
 	for (int i = 0; i < MAC_SIZE; i++)
-		frame.hdr.dst[i] = mac[i];
+		frame.hdr.dst[i] = 0xFF;
 	
 	memcpy(frame.data, msg, mystrlen(msg)); //Data
 

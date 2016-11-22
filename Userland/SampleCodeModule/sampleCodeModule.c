@@ -8,7 +8,7 @@ static int exit = FALSE;
 int main() {
 	
 	// OS welcome
-	initWelcome();
+	//initWelcome();
 	
 	// Loop shell until user exits OS
 	while(!exit){

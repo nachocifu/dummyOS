@@ -28,6 +28,8 @@ int parseCommand(char *commandName) {
 	
 }
 
+char buf[1000];
+
 /**
 Run command with the submited params
 
@@ -53,22 +55,22 @@ int runCommand(int command, char **params) {
 		case COMMAND_NET: {
 			
 			if (strcmp((char *)params[1], "send") == 0){
-				char bufs[1000];
-				printf("Ingrese mensaje: ");
-				scanf("%s", bufs);
-				//printf("\n%d\n", strlength(bufs));
-				net_send(bufs, 0);
-				bufs[0] = 0;
+				
+				printf("Enter mac (Format: FF:FF:FF:FF:FF:FF): ");
+				scanf("%s", buf);
+				if (strlength(buf) != 18){
+					printf("Error: Mac address error.\n");
+					break;
+				}
+				printf("Enter message: ");
+				scanf("%s", &buf[strlength(buf) - 1]);
+
+				net_send(buf);
 			}else if (strcmp((char *)params[1], "read") == 0){
-				char bufr[1000];
-				int size = net_receive(bufr);
-				//printf("%d", size);
-				// for (int i = 0; i < size; ++i)
-				// {
-				// 	printf("->%d<-", buf[i] );
-				// }
-				printf("%s", bufr);
-				bufr[0] = 0;
+				int size = net_receive(buf);
+				printf("%s", buf);
+			}else{
+				printf("Net command not found.\n");
 			}
 			break;
 		}
@@ -92,6 +94,7 @@ int runCommand(int command, char **params) {
 		}
 		case COMMAND_NULL: {
 			// If invalid command, do nothing
+			printf("Invalid command.\n");
 			break;
 		}
 	}

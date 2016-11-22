@@ -12,7 +12,7 @@
 
 
 void net_start();
-void net_send(char *msg, char *mac);
+void net_send(char *msg);
 int net_read(char *b);
 
 #endif
