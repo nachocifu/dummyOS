@@ -7,6 +7,8 @@ static int exit = FALSE;
 
 int main() {
 	
+
+	
 	// OS welcome
 	initWelcome();
 	
