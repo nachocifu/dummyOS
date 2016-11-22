@@ -34,6 +34,15 @@ uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base){
 }
 
 /**
+Send char to cli descriptor
+
+@param c Char to send to cli descriptor
+*/
+void putChar(char c) {
+	printf("%c", c);
+}
+
+/**
 Send formated string to the cli descriptor
 
 @param *format Pointer to the format string
@@ -127,6 +136,17 @@ int stringToInt(char *str, int lenght){
 }
 
 /**
+Send char to cli descriptor
+
+@return char The first char read 
+*/
+char getChar() {
+	char c;
+	scanf("%c", &c);
+	return c;
+}
+
+/**
  *La funcion scanf funciona como la clasica funcion de scanf.
  *La particularidad de esta en este proyecto es que para recibir el valor de pantalla hace polling.
  *La funcion le entran los characteres ni bien se ingresan en pantalla pero unicamente los devuelve cuando
@@ -134,6 +154,12 @@ int stringToInt(char *str, int lenght){
  *En caso que el usuario quiera un "feed" en tiempo real de la pantalla se puede crear otra funcion de tipo scan
  *que simplemente no espere ningun character especial.
  */
+/**
+Read formated string from the cli descriptor
+
+@param *format Pointer to the format string to scan
+@param ... Pointers for all scanned parameters in format
+*/
 void scanf(char *format, ...){
 
 	//TODO: Revisar que el string sea valido y implementar que scan devuelva los valores en los punteros ingresados.
