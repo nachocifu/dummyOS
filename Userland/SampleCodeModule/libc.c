@@ -248,6 +248,10 @@ void net_send(char *s){
 	syscall(SYSCALL_WRITE, s, 0, DESCRIPTOR_NET);
 }
 
+// void *malloc(int size){
+// 	return (void *)syscall(SYSCALL_MALLOC, 0, size, 0);
+// }
+
 static void* ptr = 0x600000;
 void *malloc(int size){
 	void *ret = ptr;

@@ -1,9 +1,6 @@
 #include <stdint.h>
 
 
-void macStringToMacArray(char *macString, char *macArray){
-	
-}
 
 int mystrlen(char *s){
 	int c = 0;

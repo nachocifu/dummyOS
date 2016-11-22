@@ -4,14 +4,6 @@
 #define PCI_CONFIG_ADDRESS  0x0CF8
 #define PCI_CONFIG_DATA     0x0CFC
 
-#define RTL_VENDOR_ID 0x10EC
-#define RTL_DEVICE_ID 0x8139
-
-#define INPUT_OUTPUT 1
-#define MEMORY_MAPPING 0
-#define NULL 0
-
-
 
 #include <stdint.h>
 
@@ -29,5 +21,7 @@ uint16_t sysInWord(uint16_t addr);
 uint8_t sysInByte(uint16_t addr);
 
 int mystrlen(char *s);
+
+
 
 #endif
