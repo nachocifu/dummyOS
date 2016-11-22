@@ -49,7 +49,9 @@ int runCommand(int command, char **params) {
 			break;
 		}
 		case COMMAND_TIME: {
-			printf("Printf del tiempo del sistema\n");
+			char *time = (char *)malloc(20);
+			getTime(time);
+			printf("Current time: %s\n", time);
 			break;
 		}
 		case COMMAND_NET: {

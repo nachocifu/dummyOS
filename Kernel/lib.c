@@ -1,6 +1,72 @@
 #include <stdint.h>
 
+void getTime(char *ptr){
 
+	sysOutByte(0x70, 0x0B);
+	uint16_t RTCConfig = sysInByte(0x71);
+	RTCConfig = RTCConfig | (1 << 2);
+	sysOutByte(0x70, 0x0B);
+	sysOutByte(0x71, RTCConfig);
+
+
+	
+	sysOutByte((uint16_t)0x70, (uint16_t)0x00);
+	unsigned int seconds = 0;
+	seconds = sysInByte((uint16_t)0x71);
+	
+	sysOutByte((uint16_t)0x70, (uint16_t)0x02);
+	unsigned int minutes = 0;
+	minutes = sysInByte((uint16_t)0x71);
+
+	sysOutByte((uint16_t)0x70, (uint16_t)0x04);
+	unsigned int hours = 0;
+	hours = sysInByte((uint16_t)0x71);
+
+
+	char secondsString[3];
+	uintToBase(seconds, secondsString, 10);
+
+	char minutesString[3];
+	uintToBase(minutes, minutesString, 10);
+
+	char hoursString[3];
+	uintToBase(hours, hoursString, 10);
+	
+
+	ptr[0] = hoursString[0];
+	ptr[1] = hoursString[1];
+
+	ptr[2] = ':';
+
+	ptr[3] = minutesString[0];
+	ptr[4] = minutesString[1];
+
+	ptr[5] = ':';
+
+	ptr[6] = secondsString[0];
+	ptr[7] = secondsString[1];
+
+	ptr[8] = 0;
+	
+}
+
+static void* ptr = 0x600000;
+void *malloc(int size){
+	void *ret = ptr;
+	ptr += size;
+	return ret;
+}
+
+void *calloc(int size){
+	char* ret = malloc(size);
+	for (int i = 0; i < size; i++)
+		ret[i] = 0;
+	return (void *)ret;
+}
+
+void free(void *ptr){
+	return;
+}
 
 int mystrlen(char *s){
 	int c = 0;

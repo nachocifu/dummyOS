@@ -134,6 +134,22 @@ int sysCallDispacher(int function, char* segundo, int tercero, int cuarto){
 			}
 			break;
 		}
+		case SYSCALL_MALLOC:{
+			return malloc(tercero);
+			break;
+		}
+		case SYSCALL_CALLOC:{
+			return calloc(tercero);
+			break;	
+		}
+		case SYSCALL_FREE:{
+			free(segundo);
+			break;	
+		}
+		case SYSCALL_TIME:{
+			getTime(segundo);
+			break;
+		}
 		default:{
 			ncPrint("SysCall not found.");
 			break;

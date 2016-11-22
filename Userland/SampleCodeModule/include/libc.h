@@ -15,3 +15,7 @@ char* strconcat(char *a, char *b);
 int strlength(char *c);
 void net_send(char *s);
 int net_receive(char *s);
+void *malloc(int size);
+void *calloc(int size);
+void free(void *ptr);
+void getTime(char *ptr);
