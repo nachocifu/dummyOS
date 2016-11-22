@@ -21,6 +21,9 @@ int main() {
 		exit = runCommand(parseCommand(params[0]), params);
 	}
 
+	printf("bye! :(\n");
+	halt();
+
 	return 0;
 }
 

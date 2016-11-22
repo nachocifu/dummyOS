@@ -33,6 +33,14 @@ uint32_t uintToBase(uint64_t value, char * buffer, uint32_t base){
 	return digits;
 }
 
+//Halt.
+void halt(){
+	haltAsm();
+}
+
+/**
+Llama al syscall get time con un puntero a string.
+*/
 void getTime(char *ptr){
 	syscall(SYSCALL_TIME, ptr, 0, 0);
 }

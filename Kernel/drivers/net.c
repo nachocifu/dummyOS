@@ -1,4 +1,4 @@
-#include <net.h>
+#include <drivers.h>
 #include <leeryConsole.h>
 
 
@@ -17,10 +17,10 @@
 #define RX_OVERHEAD 4 //De protocolo de ethernet.
 #define RX_DATA_OFFSET (RX_OVERHEAD + ETH_HLEN) //De protocolo de ethernet.
 
-#define BUFFER_SIZE 8*1024+16
+#define BUFFER_SIZE 8*1024+16 //Buffer size segun OSDev.
 
-#define MAC_SIZE 6
-#define MAC_STRING_LENGHT 17
+#define MAC_SIZE 6 //Mac size en bytes.
+#define MAC_STRING_LENGHT 17 //Mac size en formato FF:FF:FF:FF:FF:FF con un 0 al final para compatible con C.
 
 
 ethframe frame; //Este es el frame que se usa para transmitir. 
@@ -126,14 +126,19 @@ void net_start(){
 		unsigned char readByte = sysInByte(IOADDR + i);
 		frame.hdr.src[i] = readByte; //Saco la mac del registro 0x00 y lo guardo en el frame ethernet.
 		myMac[i] = readByte; //Guardo en memoria local.
+
+		//Aca guardo la mac en string formato FF:FF:FF:FF:FF:FF que es como nuestro protocolo funciona.
 		macString[i*3] = ((readByte / 16) >= 9) ? (readByte / 16) + 'A' - 10 : (readByte / 16) + '0';
 		macString[i*3 + 1] = ((readByte % 16) >= 9) ? (readByte % 16) + 'A' - 10 : (readByte % 16) + '0';
 		macString[i*3 + 2] = ':';
 	}
 }
 
+/**
+	Esto se fija si el mensaje es para mi o broadcast.
+*/
 void checkAddress(){
-	if (macEqual(macString, (char *)&receiveBuffer[RX_DATA_OFFSET]) //Esto se fija si el mensaje es para mi o broadcast.
+	if (macEqual(macString, (char *)&receiveBuffer[RX_DATA_OFFSET]) 
 		|| macEqual(macBroadcast, (char *)&receiveBuffer[RX_DATA_OFFSET])){
 		//Do nothing.
 	}else{
@@ -217,15 +222,15 @@ void net_send(char *msg){
 	for (int i = 0; i < MAC_SIZE; i++)
 		frame.hdr.dst[i] = 0xFF;
 	
-	memcpy(frame.data, msg, mystrlen(msg)); //Data
+	memcpy(frame.data, msg, mystrlen(msg)); //Lleno el buffer de transmicion.
 
-	frame.hdr.proto = ETH_P_802_3; //Protocolo
+	frame.hdr.proto = ETH_P_802_3; //Defino protocolo.
 
 	uint32_t size = ETH_HLEN + mystrlen(msg); //Tamano de la transmision.
 	
-	while (!(sysInLong(TSD0) & TSD_OWN)){ }
+	while (!(sysInLong(TSD0) & TSD_OWN)){ } //Espero...
 
-	sysOutLong(TSD0, size);
+	sysOutLong(TSD0, size); //Transmito! Enviando el tamano al registro TDS0.
 }
 
 

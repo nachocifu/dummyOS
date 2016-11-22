@@ -19,3 +19,5 @@ void *malloc(int size);
 void *calloc(int size);
 void free(void *ptr);
 void getTime(char *ptr);
+void haltAsm();
+void halt();

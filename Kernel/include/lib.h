@@ -22,10 +22,6 @@ uint8_t sysInByte(uint16_t addr);
 
 int mystrlen(char *s);
 
-void *malloc(int size);
-void *calloc(int size);
-void free(void *ptr);
-
 void getTime(void *ptr);
 
 #endif

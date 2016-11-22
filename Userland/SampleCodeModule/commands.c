@@ -77,8 +77,15 @@ int runCommand(int command, char **params) {
 			break;
 		}
 		case COMMAND_HELP: {
-			printf("DummyOS Available Commands !\n");
-			printf("echo    net    help    man    time    clear\n");
+			printf("DummyOS Available Commands!\n\n");
+			printf("%s\n", man_net);
+			printf("%s\n", man_man);
+			printf("%s\n", man_time);
+			printf("%s\n", man_help);
+			printf("%s\n", man_clear);
+			printf("%s\n", man_echo);
+			printf("%s\n", man_poweroff);
+			printf("\n");
 			break;
 		}
 		case COMMAND_MAN: {

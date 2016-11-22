@@ -1,4 +1,5 @@
 GLOBAL syscall
+GLOBAL haltAsm
 
 
  ; syscall: Esta funcion en asembler se utiliza para, desde C, llamar a las syscalls con ints. 
@@ -27,3 +28,6 @@ syscall:
 
 	int 80h
 	ret
+
+haltAsm:
+	hlt
