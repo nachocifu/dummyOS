@@ -93,19 +93,20 @@ Dispatch syscalls to the corresponding functions
 
 @param	function Syscall to call
 @param	segundo Pointer to string
-@param	length	Length
+@param	tercero	Length
 @param	cuarto Decryptor to use
 */
-int sysCallDispacher(int function, char* segundo, int length, int cuarto){
+int sysCallDispacher(int function, char* segundo, int tercero, int cuarto){
 
 	switch(function){
 		case SYSCALL_WRITE:{
 			switch ( cuarto ) {
 				case DESCRIPTOR_CLI: {
-					write(segundo, length);
+					write(segundo, tercero);
 					break;
 				}
 				case DESCRIPTOR_NET: {
+					char mac[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 					net_send(segundo);
 					break;
 				}
@@ -133,7 +134,6 @@ int sysCallDispacher(int function, char* segundo, int length, int cuarto){
 			}
 			break;
 		}
-		
 		default:{
 			ncPrint("SysCall not found.");
 			break;
@@ -154,6 +154,14 @@ void miCallbacldeTeclado(uint8_t c, int function){
 		}
 		case RESPONSE_BACKSPACE:{
 			backspace();
+			// char messageBuff[100];
+			// int size = net_read(messageBuff);
+			// if (size > 0){
+			// 	for (int i = 0; i < size; i++){
+			// 		lcPrintChar((char)messageBuff[i]);
+			// 	}
+			// 	lcNewLine();
+			// }
 			break;
 		}
 		case RESPONSE_ENTER:{
