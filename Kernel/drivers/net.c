@@ -81,9 +81,9 @@ void pciConfigWriteWord (uint8_t bus, uint8_t func, uint8_t offset, uint8_t valu
 	Habilitamos DMA para nuestros perifericos.
 */
 void dma_start(){
-  uint32_t reg = pciConfigReadWord(0, 0x18, 0x04); //Esto es el PCI Configuration Space de la placa.
-  reg |= (1<<2); //Pongo el bit 2 en 1 para habilitar DMA para que pueda escribir en la memoria (los buffers).
-  pciConfigWriteWord(0, 0x18, 0x04, reg);
+	uint32_t reg = pciConfigReadWord(0, 0x18, 0x04); //Esto es el PCI Configuration Space de la placa.
+	reg |= (1<<2); //Pongo el bit 2 en 1 para habilitar DMA para que pueda escribir en la memoria (los buffers).
+	pciConfigWriteWord(0, 0x18, 0x04, reg);
 }
 
 void net_start(){

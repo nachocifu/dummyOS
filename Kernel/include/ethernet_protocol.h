@@ -28,10 +28,10 @@ struct ethhdr {
 };
 
 
-/* This is the complete Ethernet frame. */
+
 typedef struct{
-  struct ethhdr	hdr;			/* frame header		*/
-  char			data[ETH_DLEN];	/* frame data (variable)*/
+  struct ethhdr	hdr;	
+  char	data[ETH_DLEN];	
 }  ethframe;
 
 #pragma pack(pop)
