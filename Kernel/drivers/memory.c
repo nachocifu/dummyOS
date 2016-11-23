@@ -2,7 +2,9 @@
 /**
  * Esta driver es el que se ocupa de manejo de memoria.
  */
+
 static void* ptr = 0x600000;
+
 void *malloc(int size){
 	void *ret = ptr;
 	ptr += size;

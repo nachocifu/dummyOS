@@ -376,17 +376,3 @@ char* strconcat(char *a, char *b) {
 	return str; 
 }
 
-
-
-// static void *ptr = NULL;
-
-// mm_init() {
-//   ptr = syscall(GET_FREE_MEMORY);
-// };
-
-// void *malloc(size_t size) {
-// 	void* ret = ptr;
-// 	ptr += size;
-// 	return ret;
-// }
-
