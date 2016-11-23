@@ -5,7 +5,6 @@
 #include <naiveConsole.h>
 #include <interruptions.h>
 #include <drivers.h>
-#include <net.h>
 #include <syscalls.h>
 
 
